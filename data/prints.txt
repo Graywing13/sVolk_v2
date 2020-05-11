@@ -1,0 +1,21 @@
+// Prints! Source: https://dragalialost.gamepedia.com
+// ---------------------------------------------------------------------------------------------------------------------
+// Notes:
+//    - This file calls things from abilities.txt to minimize duplication.
+//    - All prints are at max level and no augmentation.
+//    - Anything with no element or weapon requirements has a Req of "none".
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Format:
+// (1) String printName
+// (2) int hp
+// (3) int str
+// (4) int might
+// (5) String s1Abil        << Abil: references abilities.txt
+// (6) String s1Req         << Req: as in weapon or element requirement
+// (7) String s2Abil
+// (8) String s2Req
+// ---------------------------------------------------------------------------------------------------------------------
+// ♥ ♥ ♥ PRINTS ♥ ♥ ♥
+Elegant Escort,151,54,295,Burning Punisher,none,none,none
+Twinfold Bonds,176,65,421,Skill Damage,dagger,Flurry Strength,none

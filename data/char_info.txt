@@ -1,0 +1,34 @@
+// This file contains the characters' skills, names, etc. Essentially basic info.
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Notes:
+//    - Sources are from Gamepedia and Gamepress.
+//    - All characters are assumed to be maxed (e.g. level 80, 100)
+//    - HP and STR assumes maxed mana circles/spiral
+//    - Replace "=" with "means"
+//    - Set all characters' weapons as none
+// ---------------------------------------------------------------------------------------------------------------------
+// Format:
+// (1)  String char-name
+// (2)  String element
+// (3)  String weaponType
+// (4)  String s1-name
+// (5)  String s2-name
+// (6)  String ability1
+// (7)  String ability2
+// (8)  String ability3
+// (9)  String coab-team
+// (10) String coab-chain
+// (11) int    might            << mutable; ALWAYS TAKE THE PROCESSTXT mt!
+// (12) int    hp
+// (13) int    str
+// (14) int    def
+// (15) Weapon w
+// (16) String skillWeaponName
+//
+// \\w+(\\s\\w+)*,\\w+,\\w+(,\\w+(\\s-)?(\\s\\w+)*){7}(,\\d+){4},none
+// name,elem,wT,s1N,s2N,a1,a2,a3,ct,cc,mt,hp,str,def,w
+//
+// ---------------------------------------------------------------------------------------------------------------------
+Ezelith,Flame,Dagger,Howling Meteor,Brilliant Inferno,Flash of Genius,Potent Sleep Res 100,Broken Punisher 35,Critical Rate 10,Flame - Combo Time I,3228,957,371,10,none
+Xania,Flame,Wand,Ivyblaze,Pyreblossom,Skill Damage 35,Potent Stun Res 50,Stun Res 50,Skill Damage 15,Flame - Burn means User Wind Res 5,3054,850,584,8,none

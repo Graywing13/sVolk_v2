@@ -1,0 +1,29 @@
+// coabs!!! Source: https://gamepress.gg/dragalialost/
+// Start this up during gameInit.
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Format:
+//    • (1) String   skillName
+//    • (2) String   coabAbil
+//    • (3) double   coabPercentage
+//    • (4) boolean  wholeTeam           // means "does this coab apply to the whole team or only for an element"
+//
+// "\w+(\s\w+)*,\w+,\d+(\.\d+)?,(true|false)"
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Notes:
+//    - If wholeTeam is false then it's assumed to only apply to that element.
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Glossary:
+// TERM                  DEFINITION
+// burnWindRes-15-10     When the enemy is burned, the user's wind res is boosted by x% for 15 seconds, and this buff's cooldown time is 10s.
+// comboTimeExtend-2.5   Extend combo time by 2.5 seconds.
+// ---------------------------------------------------------------------------------------------------------------------
+// ♥ ♥ ♥ NORMAL COABS ♥ ♥ ♥
+Critical Rate 10,crit,10,true
+Skill Damage 15,damage,15,true
+//
+// ♥ ♥ ♥ COAB CHAINS ♥ ♥ ♥
+Flame - Combo Time I,comboTimeExtend-2.5,0,false
+Flame - Burn means User Wind Res 5,burnWindRes-15-10,5,false

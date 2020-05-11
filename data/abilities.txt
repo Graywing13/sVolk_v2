@@ -1,0 +1,41 @@
+// Abilities of all weapons, adventurers, and prints! Source: https://gamepress.gg/dragalialost/
+// Mainly used during gamePlay.
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Glossary:
+// TERM                DEFINITION
+// eAtkDef-n1-n2-n3    (normal) attacks reduce ENEMY defense by n1% for n2 seconds with n3% base chance
+// crit-7              increases user critical rate for 7 seconds
+// sleepHit-15         hit by a sleep attack with cooldown 15 seconds before this skill is avail. again
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Notes:
+//    ♠ sleepHit, stunHit etc means hit by an attack that would've stunned or slept the user.
+//    ♠ Use "0" or "none" in their respective places when none is needed / available
+//    ♠ "always" means no prereq check needed; it's continuous.
+//
+// TODO need to configure eBreak (enemyBreak) to be a bool; if eBreak then do this, no count needed.
+// ---------------------------------------------------------------------------------------------------------------------
+// Format:
+// (1) String name
+// (2) String effect1
+// (3) int effect1Percentage
+// (4) String effect1Requirement
+// (5) int effect1ReqCount
+// (6) String effect2
+// (7) int effect2Percentage
+// (8) String effect2Requirement
+// (9) int effect2ReqCount
+//
+// name,e1,e1P,e1R,e1RC,e2,e2P,e2R,e2RC
+// "\\w+(\\s-)?(\\s+\\w+)*((,\\w+(-\\d+)?,\\d+){2}){2}"
+//
+// ---------------------------------------------------------------------------------------------------------------------
+Broken Punisher 35,damage,35,eBreak,0,none,0,none,0
+// ♦ ♦ ♦ the one below is special: hp drops to 70 gives the boost, for a max of 5 times.
+Flame - Unyielding Offense 4,strength,4,hpUnder-70,5,none,0,none,0
+Flash of Genius,debuff,20,combo,15,crit-7,20,s1connects,2
+Potent Sleep Res 100,sleepRes,100,sleepHit,1,strength-10,15,sleepHit-15,1
+Potent Stun Res 50,stunRes,50,stunHit,1,strength-10,15,sleepHit-15,1
+Stun Res 50,stunRes,50,always,0,none,0,none,0
+Skill Damage 35,damage,35,always,0,none,0,none,0

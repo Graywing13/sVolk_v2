@@ -1,0 +1,22 @@
+// Weapons! Data once again from gamepedia and gamepress
+// ---------------------------------------------------------------------------------------------------------------------
+// Notes:
+//   - all weapons are MUB and fully upgraded.
+// ---------------------------------------------------------------------------------------------------------------------
+// Format:
+// (1) String  weaponName
+// (2) String  element                   << One of "Flame", "Light", "None", "Shadow", "Water", "Wind"
+// (3) String  weaponType                << One of "Axe", "Blade", "Bow", "Dagger", "Lance", "Staff", "Sword", "Wand"
+// (4) int     maxMight_Element          << Abbreviated as mtE
+// (5) int     maxMight_OffElement       << Abbreviated as mtOE
+// (6) int     hp
+// (7) int     strength
+// (8) String  abilityName
+//
+// \\w+(\\s\\w+)*(,\\w+){2}(,\\d+){4},\\w+(\\s-)?(\\s\\w+)*
+// ---------------------------------------------------------------------------------------------------------------------
+// ♥ ♥ ♥ WEAPONS ♥ ♥ ♥
+Battleworn Wand,None,Wand,0,0,0,0,none
+Battleworn Dagger,None,Dagger,0,0,0,0,none
+Chimeratech Archmage,Flame,Wand,1849,1259,178,1001,Flame - Unyielding Offense 4
+Chimeratech Elite,Flame,Dagger,1824,1242,181,981,Flame - Unyielding Offense 4

@@ -1,0 +1,44 @@
+// This file contains the skills of the characters, weapons, and dragons, and what effects the skills have.
+// Sources for skill info: dragalialost.gamepedia.com and gamepress.gg/dragalialost
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Notes:
+//   - All skills are max level.
+//   - If a skill does no damage, set all damage values to 0.
+//   - If a skill does not boost, set boost names to "none" and percentages to 0
+//   - If a skill debuffs the enemy, set boostPercentage to 0 (b_p only affects self)
+//   - all damage is with respect to the element; e.g. Ivyblaze does 895 FLAME damage, so it'd do more to hms than hmc.
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Glossary:
+// TERM                DEFINITION
+// eAtkDef-n1-n2-n3    (normal) attacks reduce ENEMY defense by n1% for n2 seconds with n3% base chance
+// burn-12-3.9         Inflict burn, which lasts for 12 seconds and does x% of damage every 3.9 seconds
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// Format:
+// (val #) valueType description
+// (1)     String    skillName
+// (2)     int       spCost
+// (3)     double    iFrameTime
+// (4)     boolean   canMove?
+// (5)     boolean   energizedAffected?
+// (6)     int       damage1Percent
+// (7)     int       damage1Hits
+// (8)     int       damage2Percent
+// (9)     int       damage2Hits
+// (10)    String    boost1Name
+// (11)    double    boost1Percentage
+// (12)    String    boost2Name
+// (13)    double    boost2Percentage
+// (14)    String    boost3Name
+// (15)    double    boost3Percentage
+//
+// \\w+(\\s\\w+)*,\\d+,\\d+(\\.\\d+)?(,(true|false)){2}(,\\d+){4}(,\\w+(-\\d+(\\.\\d+)?)*,\\d+(\\.\\d+)?){3}
+//
+// ---------------------------------------------------------------------------------------------------------------------
+// ♥ ♥ ♥ SKILLS ♥ ♥ ♥ (Alphabetical Order)
+Brilliant Inferno,8940,0.6,false,false,0,0,0,0,strength,20,eAtkDef-5-5-15,0,none,0
+Ivyblaze,2759,0.9,false,true,895,1,0,0,burn-12-3.9,80.3,none,0,none,0
+Howling Meteor,2400,3.4,true,true,63,10,400,1,none,0,none,0,none,0
+Pyreblossom,5570,1,false,true,895,1,0,0,burn-12-3.9,80.3,none,0,none,0
