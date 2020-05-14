@@ -43,9 +43,12 @@ public class Char {
     }
 
     // Initialization functions ========================================================================================
-    public void initChar(Char c) {
-        charAbilInit(c);
-        charSkillInit(c);
+    // makes a new instance of that character based on dictionary's template
+    public static Char initChar(String name) {
+        Char c = Char.copy(ProcessTxt.CHAR_INFO_DICTIONARY.get(name));
+        c.charAbilInit(c);
+        c.charSkillInit(c);
+        return c;
     }
 
     private void charAbilInit(Char c) {
@@ -99,6 +102,10 @@ public class Char {
         return this.ct;
     }
 
+    public String getWT() {
+        return this.wT;
+    }
+
     // Other helper functions ==========================================================================================
     public void printAbilities(Ability ability) {
         System.out.println(name + "'s ability is " + ability.toString());
@@ -109,7 +116,7 @@ public class Char {
     }
 
     public static Char copy(Char c) {
-        return new Char(c.name, c.elem, c.wT, c.s1N,c.s2N,c.a1,c.a2,c.a3,c.cc,c.ct,c.mt,c.hp,c.str,c.def,c.w);
+        return new Char(c.name, c.elem, c.wT, c.s1N, c.s2N, c.a1, c.a2, c.a3, c.cc, c.ct, c.mt, c.hp, c.str, c.def, c.w);
     }
 
     public static void updateMt(Char c) {
@@ -117,5 +124,11 @@ public class Char {
 
         if (c.w.elem.equals(c.elem)) c.mt += c.w.mtE;
         else c.mt += c.w.mtOE;
+    }
+
+    public void setWeapon(String wepName) {
+        Weapon target = ProcessTxt.WEAPONS_DICTIONARY.get(wepName);
+        this.a3 = target.aN;
+        this.w = target;
     }
 }

@@ -7,27 +7,16 @@ public class Team {
 
     Char c1, c2, c3, c4;
     ArrayList<Coab> coabs;
+    Char[] team;
 
-    public Team(String c1Name, String c2Name, String c3Name, String c4Name) {
-
-        Char[] team = initTeamMembers(c1Name, c2Name, c3Name, c4Name);
+    public Team(Char[] team) {
         this.c1 = team[0];
         this.c2 = team[1];
         this.c3 = team[2];
         this.c4 = team[3];
-
         this.coabs = initCoabs(team);
-
-        System.out.println("\n♦ ♦ ♦ Weapon Selection");
-        initWeapons(team);
-
-        printTeamInfo(team);
-    }
-
-    private void initWeapons(Char[] players) {
-        for (Char c : players) {
-            Weapon.changeWeapon(c);
-        }
+        this.team = team;
+        printTeamInfo();
     }
 
     private ArrayList<Coab> initCoabs(Char[] team) {
@@ -46,21 +35,11 @@ public class Team {
         return coA;
     }
 
-    private Char[] initTeamMembers(String c1Name, String c2Name, String c3Name, String c4Name) {
-        String[] names = new String[]{c1Name, c2Name, c3Name, c4Name};
-        Char[] chars = new Char[4];
-        for (int i = 0; i < 4; i++) {
-            System.out.println("\n♦ ♦ ♦ Initializing P" + (i+1) + " as " + names[i]);
-            chars[i] = Char.copy(ProcessTxt.CHAR_INFO_DICTIONARY.get(names[i]));
-            chars[i].initChar(chars[i]);
-        }
-        return chars;
-    }
-
     // get team info and prints it to terminal.
-    public void printTeamInfo(Char[] team) {
+    public void printTeamInfo() {
         System.out.println("♥ ♥ ♥ Team Info ♥ ♥ ♥");
-        for (Char c : team) {
+        Char[] chars = new Char[]{this.c1, this.c2, this.c3, this.c4};
+        for (Char c : chars) {
             System.out.println(c);
         }
         System.out.println("\n♦ ♦ ♦ This team's coabs:");

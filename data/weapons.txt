@@ -16,7 +16,7 @@
 // \\w+(\\s\\w+)*(,\\w+){2}(,\\d+){4},\\w+(\\s-)?(\\s\\w+)*
 // ---------------------------------------------------------------------------------------------------------------------
 // ♥ ♥ ♥ WEAPONS ♥ ♥ ♥
-Battleworn Wand,None,Wand,0,0,0,0,none
 Battleworn Dagger,None,Dagger,0,0,0,0,none
+Battleworn Wand,None,Wand,0,0,0,0,none
 Chimeratech Archmage,Flame,Wand,1849,1259,178,1001,Flame - Unyielding Offense 4
 Chimeratech Elite,Flame,Dagger,1824,1242,181,981,Flame - Unyielding Offense 4

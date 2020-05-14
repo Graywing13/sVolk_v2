@@ -1,5 +1,6 @@
 package util;
 
+import javax.swing.DefaultComboBoxModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -165,6 +166,7 @@ public class ProcessTxt {
         // String wN, elem, wT;
         // int mtE, mtOE, hp, str;
         String aN;
+        System.out.println(entry); // todo remove
 
         Scanner parseLine = new Scanner(entry).useDelimiter(",");
         try {
