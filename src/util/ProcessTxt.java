@@ -166,7 +166,6 @@ public class ProcessTxt {
         // String wN, elem, wT;
         // int mtE, mtOE, hp, str;
         String aN;
-        System.out.println(entry); // todo remove
 
         Scanner parseLine = new Scanner(entry).useDelimiter(",");
         try {
