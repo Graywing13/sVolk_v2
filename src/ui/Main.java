@@ -21,7 +21,6 @@ public class Main {
         ProcessTxt.initDictionary(ProcessTxt.WEAPONS_DICT_LOCATION, "\\w+(\\s\\w+)*(,\\w+){2}(,\\d+){4},\\w+(\\s-)?(\\s\\w+)*");
 
         UI ui = new UI();
-        ui.runGame();
     }
 
 }

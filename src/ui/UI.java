@@ -1,27 +1,40 @@
 package ui;
 
-import util.Char;
-import util.ProcessTxt;
-import util.Team;
-import util.Weapon;
+import util.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import javax.imageio.ImageIO;
 
 public class UI {
 
     // HARD-CODED CONSTANTS
-    private static final int FRAME_WIDTH = 1366;
-    private static final int FRAME_HEIGHT = 768;
-    private static final Color DEFAULT_BKG = new Color(255, 255, 255);
+    private static final int FRAME_WIDTH = 1366 + 20;
+    private static final int FRAME_HEIGHT = 768 + 55;
+    private static final int JCOMBOBOX_HEIGHT = 40;
+    private static final int JCOMBOBOX_Y_INCREMENT = 50;
+    private static final int JCOMBO_P1_Y = 100;
+    private static final int JCOMBO_P2_Y = 100 + JCOMBOBOX_Y_INCREMENT;
+    private static final int JCOMBO_P3_Y = 100 + 2*JCOMBOBOX_Y_INCREMENT;
+    private static final int JCOMBO_P4_Y = 100 + 3*JCOMBOBOX_Y_INCREMENT;
+    private static final int JCOMBOBOX_CHAR_WIDTH = 90;
+    private static final int JCOMBOBOX_CHAR_X = 50;
+    private static final int JCOMBOBOX_WEAPON_WIDTH = 180;
+    private static final int JCOMBOBOX_WEAPON_X = 200;
+
+    private static final Color DEFAULT_BKG = new Color(0, 0, 0);
     private static final ImageIcon ICON_LOCATION = new ImageIcon("././data/logo.png");
+    private static final String GAMEPLAY_BKG_LOCATION = "././data/gameplayBKGv3.png";
 
     // CONSTANTS CALLED AFTER INITIALIZATION
     private String[] availChars = ProcessTxt.findAvailChars();
 
     // VARIABLES FOR THE TEAM
     private JFrame fChooseTeam;
+    private JFrame fGamePlay;
     private Team team; // todo add this in later?
     private String[] teamNames;
     private String[] weaponNames;
@@ -39,7 +52,7 @@ public class UI {
     private JComboBox<String> chooseWep4;
 
     public UI() {
-
+        this.runGame();
     }
 
     // runs the game after initiation is complete.
@@ -47,14 +60,13 @@ public class UI {
         Arrays.sort(availChars);
         String defaultCName = availChars[0];
 
-        this.fChooseTeam = new JFrame("sVOLK_v2");
+        this.fChooseTeam = new JFrame("sVOLK_v2: Team Selection");
         this.teamNames = new String[]{defaultCName, defaultCName, defaultCName, defaultCName};
         this.weaponNames = new String[4];
-        boolean teamSelected = false; // todo incorporate
 
-        initFrame();
+        CTInitFrame();
         initWeaponChoices();
-        selectTeam();
+        chooseTeam();
     }
 
     /**
@@ -62,7 +74,7 @@ public class UI {
      **/
 
     // sets the defaults of the big frame
-    private void initFrame() {
+    private void CTInitFrame() {
         fChooseTeam.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         fChooseTeam.getContentPane().setBackground(DEFAULT_BKG);
         fChooseTeam.setLayout(null);
@@ -70,8 +82,8 @@ public class UI {
         fChooseTeam.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
-    // select 4 characters and their weapons
-    private void selectTeam() {
+    // select 4 characters and their weapons; when "Next" pressed, calls makeTeam and initiates setupSVolk.
+    private void chooseTeam() {
         System.out.println("\n♥ ♥ ♥ Team Initiating ♥ ♥ ♥");
 
         initCharKits();
@@ -80,7 +92,7 @@ public class UI {
         nextB.setBounds(500, 500, 75, 20);
         nextB.addActionListener(e -> {
             this.team = makeTeam();
-            //setupSVolk(); // TODO
+            setupSVolk();
         });
 
         fChooseTeam.add(nextB);
@@ -90,22 +102,22 @@ public class UI {
     // inits character choosing and sets up boxes for weapon choices, filling them in as needed.
     private void initCharKits() {
         this.chooseChar1 = new JComboBox<>(availChars);
-        chooseChar1.setBounds(50, 100, 90, 20);
+        chooseChar1.setBounds(JCOMBOBOX_CHAR_X, JCOMBO_P1_Y, JCOMBOBOX_CHAR_WIDTH, JCOMBOBOX_HEIGHT);
         chooseChar1.setSelectedIndex(0);
         chooseChar1.addActionListener(e -> updatePlayer((String) chooseChar1.getSelectedItem(), 1));
 
         this.chooseChar2 = new JComboBox<>(availChars);
-        chooseChar2.setBounds(50, 150, 90, 20);
+        chooseChar2.setBounds(JCOMBOBOX_CHAR_X, JCOMBO_P2_Y, JCOMBOBOX_CHAR_WIDTH, JCOMBOBOX_HEIGHT);
         chooseChar2.setSelectedIndex(0);
         chooseChar2.addActionListener(e -> updatePlayer((String) chooseChar2.getSelectedItem(), 2));
 
         this.chooseChar3 = new JComboBox<>(availChars);
-        chooseChar3.setBounds(50, 200, 90, 20);
+        chooseChar3.setBounds(JCOMBOBOX_CHAR_X, JCOMBO_P3_Y, JCOMBOBOX_CHAR_WIDTH, JCOMBOBOX_HEIGHT);
         chooseChar3.setSelectedIndex(0);
         chooseChar3.addActionListener(e -> updatePlayer((String) chooseChar3.getSelectedItem(), 3));
 
         this.chooseChar4 = new JComboBox<>(availChars);
-        chooseChar4.setBounds(50, 250, 90, 20);
+        chooseChar4.setBounds(JCOMBOBOX_CHAR_X, JCOMBO_P4_Y, JCOMBOBOX_CHAR_WIDTH, JCOMBOBOX_HEIGHT);
         chooseChar4.setSelectedIndex(0);
         chooseChar4.addActionListener(e -> updatePlayer((String) chooseChar4.getSelectedItem(), 4));
 
@@ -124,25 +136,25 @@ public class UI {
         Arrays.fill(this.weaponNames, defaultWeapon);
 
         chooseWep1 = new JComboBox<>(new DefaultComboBoxModel<>(defaultWeps));
-        chooseWep1.setBounds(200, 100, 180, 20);
+        chooseWep1.setBounds(JCOMBOBOX_WEAPON_X, JCOMBO_P1_Y, JCOMBOBOX_WEAPON_WIDTH, JCOMBOBOX_HEIGHT);
         chooseWep1.setSelectedItem(defaultWeapon);
         fChooseTeam.add(chooseWep1);
         chooseWep1.addActionListener(e -> this.weaponNames[0] = (String) chooseWep1.getSelectedItem());
 
         chooseWep2 = new JComboBox<>(new DefaultComboBoxModel<>(defaultWeps));
-        chooseWep2.setBounds(200, 150, 180, 20);
+        chooseWep2.setBounds(JCOMBOBOX_WEAPON_X, JCOMBO_P2_Y, JCOMBOBOX_WEAPON_WIDTH, JCOMBOBOX_HEIGHT);
         chooseWep2.setSelectedItem(defaultWeapon);
         fChooseTeam.add(chooseWep2);
         chooseWep2.addActionListener(e -> this.weaponNames[1] = (String) chooseWep2.getSelectedItem());
 
         chooseWep3 = new JComboBox<>(new DefaultComboBoxModel<>(defaultWeps));
-        chooseWep3.setBounds(200, 200, 180, 20);
+        chooseWep3.setBounds(JCOMBOBOX_WEAPON_X, JCOMBO_P3_Y, JCOMBOBOX_WEAPON_WIDTH, JCOMBOBOX_HEIGHT);
         chooseWep3.setSelectedItem(defaultWeapon);
         fChooseTeam.add(chooseWep3);
         chooseWep3.addActionListener(e -> this.weaponNames[2] = (String) chooseWep3.getSelectedItem());
 
         chooseWep4 = new JComboBox<>(new DefaultComboBoxModel<>(defaultWeps));
-        chooseWep4.setBounds(200, 250, 180, 20);
+        chooseWep4.setBounds(JCOMBOBOX_WEAPON_X, JCOMBO_P4_Y, JCOMBOBOX_WEAPON_WIDTH, JCOMBOBOX_HEIGHT);
         chooseWep4.setSelectedItem(defaultWeapon);
         fChooseTeam.add(chooseWep4);
         chooseWep4.addActionListener(e -> this.weaponNames[3] = (String) chooseWep4.getSelectedItem());
@@ -158,7 +170,7 @@ public class UI {
         updateWeapons(this.teamNames[(playerNum - 1)], playerNum);
     }
 
-    // changes the weapons available for picking and sets default weapon to Battleworn ____ when corresponding character is changed.
+    // changes the weapons available for picking and sets default weapon to Battleworn [wT] when corresponding character is changed.
     private void updateWeapons(String cName, int playerNum) throws RuntimeException {
         String wT = ProcessTxt.CHAR_INFO_DICTIONARY.get(cName).getWT();
         if (playerNum == 1) {
@@ -196,5 +208,37 @@ public class UI {
         }
 
         return new Team(returnTeam);
+    }
+
+    /**
+     * GAMEPLAY INITIALIZATION
+     */
+    // calls necessary initiation functions for sVolk Gameplay stage.
+    private void setupSVolk() {
+        this.fGamePlay = new JFrame("sVOLK_v2");
+        fGamePlay.setResizable(true);
+        GPInitImages();
+        GPInitFrame();
+    }
+
+    private void GPInitImages() {
+        try {
+            final Image gameplayBKG = ImageIO.read(new File(GAMEPLAY_BKG_LOCATION));
+            fGamePlay.setContentPane(new JPanelBkg(gameplayBKG));
+        } catch (IOException e) {
+            System.out.println("Gameplay BKG not found:");
+            e.printStackTrace();
+        }
+    }
+
+    // sets up the gameplay frame.
+    private void GPInitFrame() {
+        fGamePlay.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        fGamePlay.getContentPane().setBackground(DEFAULT_BKG);
+        fGamePlay.setLayout(null);
+        fGamePlay.setIconImage(ICON_LOCATION.getImage());
+        fGamePlay.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        fGamePlay.setVisible(true);  // todo may need to move this around later
     }
 }

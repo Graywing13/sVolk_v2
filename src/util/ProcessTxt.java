@@ -1,6 +1,5 @@
 package util;
 
-import javax.swing.DefaultComboBoxModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -36,23 +35,29 @@ public class ProcessTxt {
                 if (string.startsWith("//")) continue;
                 numEntries++;
                 System.out.print("Processing entry number " + numEntries + "\r");
-                if (fileLocation.equals(ABILITIES_DICT_LOCATION)) {
-                    if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
-                    addLineToAbilDict(fileLocation, string);
-                } else if (fileLocation.equals(CHAR_INFO_DICT_LOCATION)) {
-                    if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
-                    addLineToCharDict(fileLocation, string);
-                } else if (fileLocation.equals(COABS_DICT_LOCATION)) {
-                    if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
-                    addLineToCoabDict(fileLocation, string);
-                } else if (fileLocation.equals(SKILLS_DICT_LOCATION)) {
-                    if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
-                    addLineToSkillsDict(fileLocation, string);
-                } else if (fileLocation.equals(WEAPONS_DICT_LOCATION)) {
-                    if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
-                    addLineToWeaponDict(fileLocation, string);
-                } else {
-                    throw new RuntimeException("Unrecognized dictionary location " + fileLocation);
+                switch (fileLocation) {
+                    case ABILITIES_DICT_LOCATION:
+                        if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
+                        addLineToAbilDict(fileLocation, string);
+                        break;
+                    case CHAR_INFO_DICT_LOCATION:
+                        if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
+                        addLineToCharDict(fileLocation, string);
+                        break;
+                    case COABS_DICT_LOCATION:
+                        if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
+                        addLineToCoabDict(fileLocation, string);
+                        break;
+                    case SKILLS_DICT_LOCATION:
+                        if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
+                        addLineToSkillsDict(fileLocation, string);
+                        break;
+                    case WEAPONS_DICT_LOCATION:
+                        if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
+                        addLineToWeaponDict(fileLocation, string);
+                        break;
+                    default:
+                        throw new RuntimeException("Unrecognized dictionary location " + fileLocation);
                 }
                 System.out.flush();
             }
@@ -204,16 +209,13 @@ public class ProcessTxt {
         if (!WEAPON_TYPES.contains(wT)) throw new RuntimeException("The weapon type " + wT + " is invalid.");
     }
 
-    private static void noDuplicates(HashMap dictionary, String key, String entry, String fileLocation) {
+    private static void noDuplicates(HashMap<String, ?> dictionary, String key, String entry, String fileLocation) {
         if (dictionary.containsKey(key))
             throw new RuntimeException("The entry " + entry + " already exists in " + fileLocation);
     }
 
     public static String[] findAvailChars() {
-        ArrayList<String> availCharNames = new ArrayList<>();
-        for (String name : CHAR_INFO_DICTIONARY.keySet()) {
-            availCharNames.add(name);
-        }
+        ArrayList<String> availCharNames = new ArrayList<>(CHAR_INFO_DICTIONARY.keySet());
         return availCharNames.toArray(new String[0]);
     }
 

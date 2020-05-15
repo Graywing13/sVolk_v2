@@ -2,7 +2,6 @@ package util;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Weapon implements Cloneable{
     // refer to weapons.txt for unabbreviated versions.
