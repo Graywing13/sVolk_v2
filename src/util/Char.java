@@ -106,6 +106,10 @@ public class Char {
         return this.wT;
     }
 
+    public String getElem() {
+        return this.elem;
+    }
+
     public int getMt() {
         return this.mt;
     }

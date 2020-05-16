@@ -1,5 +1,7 @@
 // TODO make a JComboBoxCustom so that the text isn't so small
 // TODO pass charMts into makeTeam so that the cpu doesn't have to recalculate?
+// TODO consider removing team
+// TODO add the coloured circle to FireLogo.png
 
 package ui;
 
@@ -30,13 +32,20 @@ public class UI {
     private static final int JLABEL_MT_WIDTH = 150;
     private static final int JLABEL_MT_X = 1000;
     private static final int CT_TEXTSIZE = 18;
-
-    private static final Color DEFAULT_BKG = new Color(0, 0, 0);
-    private static final ImageIcon ICON_LOCATION = new ImageIcon("././data/logo.png");
-    private static final String GAMEPLAY_BKG_LOCATION = "././data/gameplayBKGv3.png";
     private static final int CT_NEXT_WIDTH = 90;
     private static final int CT_NEXT_X = FRAME_WIDTH - (CT_NEXT_WIDTH + 64);
     private static final int CT_NEXT_Y = FRAME_HEIGHT - (CT_FIELD_HEIGHT + 128);
+
+    // GAMEPLAY
+    private static final int ICON_Y_INCREMENT = 52;
+    private static final int ELEM_ICON_X = 472;
+    private static final int ELEM_ICON_Y = 39;
+    private static final int ELEM_ICON_SIZE = 16;
+
+    private static final Color DEFAULT_BKG = new Color(0, 0, 0);
+    private static final ImageIcon SVOLK_LOGO_ICON = new ImageIcon("././data/img/svolkLogo.png");
+    private static final String GAMEPLAY_BKG_LOCATION = "././data/img/gameplayBKGv3.png";
+    private static final ImageIcon FIRE_ICON = new ImageIcon("././data/img/FireLogo.png");
 
     // CONSTANTS CALLED AFTER INITIALIZATION
     private String[] availChars = ProcessTxt.findAvailChars();
@@ -45,7 +54,8 @@ public class UI {
     // VARIABLES FOR THE TEAM
     private JFrame fChooseTeam;
     private JFrame fGamePlay;
-    private Team team; // todo add this in later?
+    private Team team;
+    private Char[] teamChars;
     private String[] teamNames;
     private String[] weaponNames;
     private int[] charMts;
@@ -96,7 +106,7 @@ public class UI {
         fChooseTeam.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         fChooseTeam.getContentPane().setBackground(DEFAULT_BKG);
         fChooseTeam.setLayout(null);
-        fChooseTeam.setIconImage(ICON_LOCATION.getImage());
+        fChooseTeam.setIconImage(SVOLK_LOGO_ICON.getImage());
         fChooseTeam.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
@@ -296,6 +306,7 @@ public class UI {
             c.setWeapon(weaponNames[i]);
             Char.setNewMt(c);
         }
+        this.teamChars = returnTeam;
 
         return new Team(returnTeam);
     }
@@ -311,7 +322,7 @@ public class UI {
         GPInitFrame();
     }
 
-    private void GPInitImages() {
+    private void GPInitImages() { // todo unfinished function; need to init other static images.
         try {
             final Image gameplayBKG = ImageIO.read(new File(GAMEPLAY_BKG_LOCATION));
             fGamePlay.setContentPane(new JPanelBkg(gameplayBKG));
@@ -319,6 +330,7 @@ public class UI {
             System.out.println("Gameplay BKG not found:");
             e.printStackTrace();
         }
+        configurePlayerBars();
     }
 
     // sets up the gameplay frame.
@@ -326,9 +338,24 @@ public class UI {
         fGamePlay.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         fGamePlay.getContentPane().setBackground(DEFAULT_BKG);
         fGamePlay.setLayout(null);
-        fGamePlay.setIconImage(ICON_LOCATION.getImage());
+        fGamePlay.setIconImage(SVOLK_LOGO_ICON.getImage());
         fGamePlay.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         fGamePlay.setVisible(true);
+    }
+
+    // todo documentation
+    private void configurePlayerBars() {
+        for (int i = 0; i < 4; i++) {
+            switch(teamChars[0].getElem()) {
+                case "Flame":
+                    JLabel icon = new JLabel(FIRE_ICON);
+                    icon.setBounds(ELEM_ICON_X, (ELEM_ICON_Y + ICON_Y_INCREMENT * i), ELEM_ICON_SIZE, ELEM_ICON_SIZE);
+                    fGamePlay.add(icon);
+                    break;
+                default:
+                    throw new RuntimeException("Cannot determine the element of P" + (i+1));
+            }
+        }
     }
 }

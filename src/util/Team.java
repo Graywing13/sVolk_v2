@@ -45,4 +45,17 @@ public class Team {
         for (Coab coab : this.coabs) System.out.println(coab);
     }
 
+    public Char getC1() {
+        return this.c1;
+    }
+    public Char getC2() {
+        return this.c2;
+    }
+    public Char getC3() {
+        return this.c3;
+    }
+    public Char getC4() {
+        return this.c4;
+    }
+
 }

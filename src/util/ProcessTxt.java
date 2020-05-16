@@ -11,17 +11,17 @@ public class ProcessTxt {
     public final static List<String> WEAPON_TYPES = Arrays.asList("Axe", "Blade", "Bow", "Dagger", "Lance", "Staff", "Sword", "Wand");
 
     // Dictionary Constants
-    public final static String ABILITIES_DICT_LOCATION = "./data/abilities.txt";
+    public final static String ABILITIES_DICT_LOCATION = "./data/dict/abilities.txt";
     public static final HashMap<String, Ability> ABILITIES_DICTIONARY = new HashMap<>();
-    public final static String CHAR_INFO_DICT_LOCATION = "./data/char_info.txt";
+    public final static String CHAR_INFO_DICT_LOCATION = "./data/dict/char_info.txt";
     public static final HashMap<String, Char> CHAR_INFO_DICTIONARY = new HashMap<>();
-    public final static String COABS_DICT_LOCATION = "./data/coabs.txt";
+    public final static String COABS_DICT_LOCATION = "./data/dict/coabs.txt";
     public static final HashMap<String, Coab> COABS_DICTIONARY = new HashMap<>();
-    //public final static String PRINTS_DICT_LOCATION = "./data/prints.txt";
+    //public final static String PRINTS_DICT_LOCATION = "./data/dict/prints.txt";
     //public static final HashMap<String, Print> PRINTS_DICTIONARY = new HashMap<>();
-    public final static String SKILLS_DICT_LOCATION = "./data/skills.txt";
+    public final static String SKILLS_DICT_LOCATION = "./data/dict/skills.txt";
     public static final HashMap<String, Skill> SKILLS_DICTIONARY = new HashMap<>();
-    public final static String WEAPONS_DICT_LOCATION = "./data/weapons.txt";
+    public final static String WEAPONS_DICT_LOCATION = "./data/dict/weapons.txt";
     public static final HashMap<String, Weapon> WEAPONS_DICTIONARY = new HashMap<>();
 
     // ♦ ♦ ♦ Dictionary Creation (Main)
