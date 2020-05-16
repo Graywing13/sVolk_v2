@@ -1,3 +1,6 @@
+// TODO make a JComboBoxCustom so that the text isn't so small
+// TODO pass charMts into makeTeam so that the cpu doesn't have to recalculate?
+
 package ui;
 
 import util.*;
@@ -14,23 +17,30 @@ public class UI {
     // HARD-CODED CONSTANTS
     private static final int FRAME_WIDTH = 1366 + 20;
     private static final int FRAME_HEIGHT = 768 + 55;
-    private static final int JCOMBOBOX_HEIGHT = 40;
-    private static final int JCOMBOBOX_Y_INCREMENT = 50;
-    private static final int JCOMBO_P1_Y = 100;
-    private static final int JCOMBO_P2_Y = 100 + JCOMBOBOX_Y_INCREMENT;
-    private static final int JCOMBO_P3_Y = 100 + 2*JCOMBOBOX_Y_INCREMENT;
-    private static final int JCOMBO_P4_Y = 100 + 3*JCOMBOBOX_Y_INCREMENT;
+    private static final int CT_FIELD_HEIGHT = 40;
+    private static final int CT_Y_INCREMENT = 100;
+    private static final int CT_P1_Y = 100;
+    private static final int CT_P2_Y = 100 + CT_Y_INCREMENT;
+    private static final int CT_P3_Y = 100 + 2 * CT_Y_INCREMENT;
+    private static final int CT_P4_Y = 100 + 3 * CT_Y_INCREMENT;
     private static final int JCOMBOBOX_CHAR_WIDTH = 90;
     private static final int JCOMBOBOX_CHAR_X = 50;
     private static final int JCOMBOBOX_WEAPON_WIDTH = 180;
     private static final int JCOMBOBOX_WEAPON_X = 200;
+    private static final int JLABEL_MT_WIDTH = 150;
+    private static final int JLABEL_MT_X = 1000;
+    private static final int CT_TEXTSIZE = 18;
 
     private static final Color DEFAULT_BKG = new Color(0, 0, 0);
     private static final ImageIcon ICON_LOCATION = new ImageIcon("././data/logo.png");
     private static final String GAMEPLAY_BKG_LOCATION = "././data/gameplayBKGv3.png";
+    private static final int CT_NEXT_WIDTH = 90;
+    private static final int CT_NEXT_X = FRAME_WIDTH - (CT_NEXT_WIDTH + 64);
+    private static final int CT_NEXT_Y = FRAME_HEIGHT - (CT_FIELD_HEIGHT + 128);
 
     // CONSTANTS CALLED AFTER INITIALIZATION
     private String[] availChars = ProcessTxt.findAvailChars();
+    Char defaultChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(availChars[0]);
 
     // VARIABLES FOR THE TEAM
     private JFrame fChooseTeam;
@@ -38,6 +48,7 @@ public class UI {
     private Team team; // todo add this in later?
     private String[] teamNames;
     private String[] weaponNames;
+    private int[] charMts;
 
     // VARS FOR WEAPONS
     private JComboBox<String> chooseChar1;
@@ -51,18 +62,25 @@ public class UI {
     private JComboBox<String> chooseWep3;
     private JComboBox<String> chooseWep4;
 
+    // VARS FOR MT LABELS
+    private JLabelCustom mt1;
+    private JLabelCustom mt2;
+    private JLabelCustom mt3;
+    private JLabelCustom mt4;
+    private JLabelCustom mtTeam;
+
     public UI() {
         this.runGame();
     }
 
     // runs the game after initiation is complete.
     public void runGame() {
-        Arrays.sort(availChars);
         String defaultCName = availChars[0];
 
         this.fChooseTeam = new JFrame("sVOLK_v2: Team Selection");
         this.teamNames = new String[]{defaultCName, defaultCName, defaultCName, defaultCName};
         this.weaponNames = new String[4];
+        this.charMts = new int[4];
 
         CTInitFrame();
         initWeaponChoices();
@@ -87,9 +105,10 @@ public class UI {
         System.out.println("\n♥ ♥ ♥ Team Initiating ♥ ♥ ♥");
 
         initCharKits();
+        initMtLabels();
 
         JButton nextB = new JButton("Next");
-        nextB.setBounds(500, 500, 75, 20);
+        nextB.setBounds(CT_NEXT_X, CT_NEXT_Y, CT_NEXT_WIDTH, CT_FIELD_HEIGHT);
         nextB.addActionListener(e -> {
             this.team = makeTeam();
             setupSVolk();
@@ -99,25 +118,51 @@ public class UI {
 
         fChooseTeam.setVisible(true);
     }
+
+    private void initMtLabels() {
+        Arrays.fill(this.charMts, defaultChar.getMt());
+
+        this.mt1 = new JLabelCustom(String.valueOf(charMts[0]), CT_TEXTSIZE);
+        mt1.setBounds(JLABEL_MT_X, CT_P1_Y, JLABEL_MT_WIDTH, CT_FIELD_HEIGHT);
+
+        this.mt2 = new JLabelCustom(String.valueOf(charMts[1]), CT_TEXTSIZE);
+        mt2.setBounds(JLABEL_MT_X, CT_P2_Y, JLABEL_MT_WIDTH, CT_FIELD_HEIGHT);
+
+        this.mt3 = new JLabelCustom(String.valueOf(charMts[2]), CT_TEXTSIZE);
+        mt3.setBounds(JLABEL_MT_X, CT_P3_Y, JLABEL_MT_WIDTH, CT_FIELD_HEIGHT);
+
+        this.mt4 = new JLabelCustom(String.valueOf(charMts[3]), CT_TEXTSIZE);
+        mt4.setBounds(JLABEL_MT_X, CT_P4_Y, JLABEL_MT_WIDTH, CT_FIELD_HEIGHT);
+
+        fChooseTeam.add(mt1);
+        fChooseTeam.add(mt2);
+        fChooseTeam.add(mt3);
+        fChooseTeam.add(mt4);
+
+        this.mtTeam = new JLabelCustom(String.valueOf(charMts[0] * 4), CT_TEXTSIZE);
+        mtTeam.setBounds(JLABEL_MT_X, CT_P4_Y + CT_Y_INCREMENT, JLABEL_MT_WIDTH, CT_FIELD_HEIGHT);
+        fChooseTeam.add(mtTeam);
+    }
+
     // inits character choosing and sets up boxes for weapon choices, filling them in as needed.
     private void initCharKits() {
         this.chooseChar1 = new JComboBox<>(availChars);
-        chooseChar1.setBounds(JCOMBOBOX_CHAR_X, JCOMBO_P1_Y, JCOMBOBOX_CHAR_WIDTH, JCOMBOBOX_HEIGHT);
+        chooseChar1.setBounds(JCOMBOBOX_CHAR_X, CT_P1_Y, JCOMBOBOX_CHAR_WIDTH, CT_FIELD_HEIGHT);
         chooseChar1.setSelectedIndex(0);
         chooseChar1.addActionListener(e -> updatePlayer((String) chooseChar1.getSelectedItem(), 1));
 
         this.chooseChar2 = new JComboBox<>(availChars);
-        chooseChar2.setBounds(JCOMBOBOX_CHAR_X, JCOMBO_P2_Y, JCOMBOBOX_CHAR_WIDTH, JCOMBOBOX_HEIGHT);
+        chooseChar2.setBounds(JCOMBOBOX_CHAR_X, CT_P2_Y, JCOMBOBOX_CHAR_WIDTH, CT_FIELD_HEIGHT);
         chooseChar2.setSelectedIndex(0);
         chooseChar2.addActionListener(e -> updatePlayer((String) chooseChar2.getSelectedItem(), 2));
 
         this.chooseChar3 = new JComboBox<>(availChars);
-        chooseChar3.setBounds(JCOMBOBOX_CHAR_X, JCOMBO_P3_Y, JCOMBOBOX_CHAR_WIDTH, JCOMBOBOX_HEIGHT);
+        chooseChar3.setBounds(JCOMBOBOX_CHAR_X, CT_P3_Y, JCOMBOBOX_CHAR_WIDTH, CT_FIELD_HEIGHT);
         chooseChar3.setSelectedIndex(0);
         chooseChar3.addActionListener(e -> updatePlayer((String) chooseChar3.getSelectedItem(), 3));
 
         this.chooseChar4 = new JComboBox<>(availChars);
-        chooseChar4.setBounds(JCOMBOBOX_CHAR_X, JCOMBO_P4_Y, JCOMBOBOX_CHAR_WIDTH, JCOMBOBOX_HEIGHT);
+        chooseChar4.setBounds(JCOMBOBOX_CHAR_X, CT_P4_Y, JCOMBOBOX_CHAR_WIDTH, CT_FIELD_HEIGHT);
         chooseChar4.setSelectedIndex(0);
         chooseChar4.addActionListener(e -> updatePlayer((String) chooseChar4.getSelectedItem(), 4));
 
@@ -136,28 +181,28 @@ public class UI {
         Arrays.fill(this.weaponNames, defaultWeapon);
 
         chooseWep1 = new JComboBox<>(new DefaultComboBoxModel<>(defaultWeps));
-        chooseWep1.setBounds(JCOMBOBOX_WEAPON_X, JCOMBO_P1_Y, JCOMBOBOX_WEAPON_WIDTH, JCOMBOBOX_HEIGHT);
+        chooseWep1.setBounds(JCOMBOBOX_WEAPON_X, CT_P1_Y, JCOMBOBOX_WEAPON_WIDTH, CT_FIELD_HEIGHT);
         chooseWep1.setSelectedItem(defaultWeapon);
         fChooseTeam.add(chooseWep1);
-        chooseWep1.addActionListener(e -> this.weaponNames[0] = (String) chooseWep1.getSelectedItem());
+        chooseWep1.addActionListener(e -> updateWeapon((String) chooseWep1.getSelectedItem(), 1));
 
         chooseWep2 = new JComboBox<>(new DefaultComboBoxModel<>(defaultWeps));
-        chooseWep2.setBounds(JCOMBOBOX_WEAPON_X, JCOMBO_P2_Y, JCOMBOBOX_WEAPON_WIDTH, JCOMBOBOX_HEIGHT);
+        chooseWep2.setBounds(JCOMBOBOX_WEAPON_X, CT_P2_Y, JCOMBOBOX_WEAPON_WIDTH, CT_FIELD_HEIGHT);
         chooseWep2.setSelectedItem(defaultWeapon);
         fChooseTeam.add(chooseWep2);
-        chooseWep2.addActionListener(e -> this.weaponNames[1] = (String) chooseWep2.getSelectedItem());
+        chooseWep2.addActionListener(e -> updateWeapon((String) chooseWep2.getSelectedItem(), 2));
 
         chooseWep3 = new JComboBox<>(new DefaultComboBoxModel<>(defaultWeps));
-        chooseWep3.setBounds(JCOMBOBOX_WEAPON_X, JCOMBO_P3_Y, JCOMBOBOX_WEAPON_WIDTH, JCOMBOBOX_HEIGHT);
+        chooseWep3.setBounds(JCOMBOBOX_WEAPON_X, CT_P3_Y, JCOMBOBOX_WEAPON_WIDTH, CT_FIELD_HEIGHT);
         chooseWep3.setSelectedItem(defaultWeapon);
         fChooseTeam.add(chooseWep3);
-        chooseWep3.addActionListener(e -> this.weaponNames[2] = (String) chooseWep3.getSelectedItem());
+        chooseWep3.addActionListener(e -> updateWeapon((String) chooseWep3.getSelectedItem(), 3));
 
         chooseWep4 = new JComboBox<>(new DefaultComboBoxModel<>(defaultWeps));
-        chooseWep4.setBounds(JCOMBOBOX_WEAPON_X, JCOMBO_P4_Y, JCOMBOBOX_WEAPON_WIDTH, JCOMBOBOX_HEIGHT);
+        chooseWep4.setBounds(JCOMBOBOX_WEAPON_X, CT_P4_Y, JCOMBOBOX_WEAPON_WIDTH, CT_FIELD_HEIGHT);
         chooseWep4.setSelectedItem(defaultWeapon);
         fChooseTeam.add(chooseWep4);
-        chooseWep4.addActionListener(e -> this.weaponNames[3] = (String) chooseWep4.getSelectedItem());
+        chooseWep4.addActionListener(e -> updateWeapon((String) chooseWep4.getSelectedItem(), 4));
     }
 
     /**
@@ -167,27 +212,72 @@ public class UI {
     // TODO: Make this call updateWyrmprints later on.
     private void updatePlayer(String cName, int playerNum) throws RuntimeException {
         this.teamNames[(playerNum - 1)] = cName;
-        updateWeapons(this.teamNames[(playerNum - 1)], playerNum);
+        updateWeaponChoices(this.teamNames[(playerNum - 1)], playerNum);
+        updateMt(playerNum);
+    }
+
+    // called when the weapons selected is changed.
+    private void updateWeapon(String weaponName, int playerNum){
+        int index = playerNum - 1;
+        this.weaponNames[index] = weaponName;
+        updateMt(playerNum);
     }
 
     // changes the weapons available for picking and sets default weapon to Battleworn [wT] when corresponding character is changed.
-    private void updateWeapons(String cName, int playerNum) throws RuntimeException {
+    private void updateWeaponChoices(String cName, int playerNum) throws RuntimeException {
         String wT = ProcessTxt.CHAR_INFO_DICTIONARY.get(cName).getWT();
-        if (playerNum == 1) {
-            chooseWep1.setModel(new DefaultComboBoxModel<>(Weapon.getAvailWeapons(wT)));
-            chooseWep1.setSelectedItem("Battleworn " + wT);
-        } else if (playerNum == 2) {
-            chooseWep2.setModel(new DefaultComboBoxModel<>(Weapon.getAvailWeapons(wT)));
-            chooseWep2.setSelectedItem("Battleworn " + wT);
-        } else if (playerNum == 3) {
-            chooseWep3.setModel(new DefaultComboBoxModel<>(Weapon.getAvailWeapons(wT)));
-            chooseWep3.setSelectedItem("Battleworn " + wT);
-        } else if (playerNum == 4) {
-            chooseWep4.setModel(new DefaultComboBoxModel<>(Weapon.getAvailWeapons(wT)));
-            chooseWep4.setSelectedItem("Battleworn " + wT);
-        } else {
-            throw new RuntimeException("Invalid player number: " + playerNum);
+        switch (playerNum) {
+            case 1:
+                chooseWep1.setModel(new DefaultComboBoxModel<>(Weapon.getAvailWeapons(wT)));
+                chooseWep1.setSelectedItem("Battleworn " + wT);
+                break;
+            case 2:
+                chooseWep2.setModel(new DefaultComboBoxModel<>(Weapon.getAvailWeapons(wT)));
+                chooseWep2.setSelectedItem("Battleworn " + wT);
+                break;
+            case 3:
+                chooseWep3.setModel(new DefaultComboBoxModel<>(Weapon.getAvailWeapons(wT)));
+                chooseWep3.setSelectedItem("Battleworn " + wT);
+                break;
+            case 4:
+                chooseWep4.setModel(new DefaultComboBoxModel<>(Weapon.getAvailWeapons(wT)));
+                chooseWep4.setSelectedItem("Battleworn " + wT);
+                break;
+            default:
+                throw new RuntimeException("Invalid player number: " + playerNum);
         }
+
+        fChooseTeam.setVisible(true);
+    }
+
+    // updates might displayed when any field is changed.
+    private void updateMt(int playerNum) throws RuntimeException {
+        int index = playerNum - 1;
+        Weapon targetWeapon = ProcessTxt.WEAPONS_DICTIONARY.get(weaponNames[index]);
+        int mt = Char.getNewMt(teamNames[index], targetWeapon);
+        switch (playerNum) {
+            case 1:
+                mt1.setText(String.valueOf(mt));
+                break;
+            case 2:
+                mt2.setText(String.valueOf(mt));
+                break;
+            case 3:
+                mt3.setText(String.valueOf(mt));
+                break;
+            case 4:
+                mt4.setText(String.valueOf(mt));
+                break;
+            default:
+                throw new RuntimeException("Invalid player number: " + playerNum);
+        }
+        this.charMts[index] = mt;
+
+        int temp = 0;
+        for (int i : charMts) {
+            temp += i;
+        }
+        mtTeam.setText(String.valueOf(temp));
 
         fChooseTeam.setVisible(true);
     }
@@ -204,7 +294,7 @@ public class UI {
             Char c = Char.initChar(teamNames[i]);
             returnTeam[i] = c;
             c.setWeapon(weaponNames[i]);
-            Char.updateMt(c);
+            Char.setNewMt(c);
         }
 
         return new Team(returnTeam);
@@ -239,6 +329,6 @@ public class UI {
         fGamePlay.setIconImage(ICON_LOCATION.getImage());
         fGamePlay.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        fGamePlay.setVisible(true);  // todo may need to move this around later
+        fGamePlay.setVisible(true);
     }
 }

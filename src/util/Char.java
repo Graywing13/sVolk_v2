@@ -106,6 +106,10 @@ public class Char {
         return this.wT;
     }
 
+    public int getMt() {
+        return this.mt;
+    }
+
     // Other helper functions ==========================================================================================
     public void printAbilities(Ability ability) {
         System.out.println(name + "'s ability is " + ability.toString());
@@ -119,11 +123,18 @@ public class Char {
         return new Char(c.name, c.elem, c.wT, c.s1N, c.s2N, c.a1, c.a2, c.a3, c.cc, c.ct, c.mt, c.hp, c.str, c.def, c.w);
     }
 
-    public static void updateMt(Char c) {
-        c.mt = ProcessTxt.CHAR_INFO_DICTIONARY.get(c.name).mt;
+    public static void setNewMt(Char c) {
+        c.mt = getNewMt(c.name, c.w);
+    }
 
-        if (c.w.elem.equals(c.elem)) c.mt += c.w.mtE;
-        else c.mt += c.w.mtOE;
+    public static int getNewMt(String name, Weapon w) {
+        Char targetChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(name);
+        int might = targetChar.mt;
+
+        if (w.elem.equals(targetChar.elem)) might += w.mtE;
+        else might += w.mtOE;
+
+        return might;
     }
 
     public void setWeapon(String wepName) {

@@ -216,7 +216,9 @@ public class ProcessTxt {
 
     public static String[] findAvailChars() {
         ArrayList<String> availCharNames = new ArrayList<>(CHAR_INFO_DICTIONARY.keySet());
-        return availCharNames.toArray(new String[0]);
+        String[] arr = availCharNames.toArray(new String[0]);
+        Arrays.sort(arr);
+        return arr;
     }
 
 }
