@@ -38,23 +38,40 @@ public class UI {
 
     // GAMEPLAY
     private static final int ICON_Y_INCREMENT = 52;
-    private static final int ELEM_ICON_X = 472;
-    private static final int ELEM_ICON_Y = 39;
-    private static final int ELEM_ICON_SIZE = 16;
+    private static final int ELEM_ICON_X = 469;
+    private static final int ELEM_ICON_Y = 37;
+    private static final int ELEM_ICON_SIZE = 20;
+    private static final int CHAR_MIDDLE_PIC_X = 479;
+    private static final int CHAR_MIDDLE_PIC_Y = 12;
+    private static final int CHAR_MIDDLE_PIC_SIZE = 36;
+    private static final int CHAR_SIDE_PIC_INCREMENT = 92;
+    private static final int CHAR_SIDE_PIC_X = 36;
+    private static final int CHAR_SIDE_PIC_Y = 63;
+    private static final int CHAR_SIDE_PIC_SIZE = 64;
+    private static final int ARENA_SIZE = 13;
+
 
     private static final Color DEFAULT_BKG = new Color(0, 0, 0);
-    private static final ImageIcon SVOLK_LOGO_ICON = new ImageIcon("././data/img/svolkLogo.png");
-    private static final String GAMEPLAY_BKG_LOCATION = "././data/img/gameplayBKGv3.png";
-    private static final ImageIcon FIRE_ICON = new ImageIcon("././data/img/FireLogo.png");
+    private static final String IMG_LOCATION = "././data/img/";
+    private static final String GAMEPLAY_BKG_LOCATION = IMG_LOCATION + "gameplayBKGv3.png";
+    private static final ImageIcon SVOLK_LOGO_ICON = new ImageIcon(IMG_LOCATION + "sVolkLogo.png");
+    private static final ImageIcon P1_BIG_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P1Big.png");
+    private static final ImageIcon P1_SMALL_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P1Small.png");
+    private static final ImageIcon P2_BIG_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P2Big.png");
+    private static final ImageIcon P2_SMALL_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P2Small.png");
+    private static final ImageIcon SVOLK_ICON = new ImageIcon(IMG_LOCATION + "VolkMarker.png");
+    private static final ImageIcon FIRE_ICON = new ImageIcon(IMG_LOCATION + "FireLogo.png");
 
     // CONSTANTS CALLED AFTER INITIALIZATION
     private String[] availChars = ProcessTxt.findAvailChars();
     Char defaultChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(availChars[0]);
 
+    // VARIABLES FOR THE GAME
+    private boolean gameRunning;
+
     // VARIABLES FOR THE TEAM
     private JFrame fChooseTeam;
     private JFrame fGamePlay;
-    private Team team;
     private Char[] teamChars;
     private String[] teamNames;
     private String[] weaponNames;
@@ -84,7 +101,7 @@ public class UI {
     }
 
     // runs the game after initiation is complete.
-    public void runGame() {
+    private void runGame() {
         String defaultCName = availChars[0];
 
         this.fChooseTeam = new JFrame("sVOLK_v2: Team Selection");
@@ -120,7 +137,7 @@ public class UI {
         JButton nextB = new JButton("Next");
         nextB.setBounds(CT_NEXT_X, CT_NEXT_Y, CT_NEXT_WIDTH, CT_FIELD_HEIGHT);
         nextB.addActionListener(e -> {
-            this.team = makeTeam();
+            makeTeam();
             setupSVolk();
         });
 
@@ -227,7 +244,7 @@ public class UI {
     }
 
     // called when the weapons selected is changed.
-    private void updateWeapon(String weaponName, int playerNum){
+    private void updateWeapon(String weaponName, int playerNum) {
         int index = playerNum - 1;
         this.weaponNames[index] = weaponName;
         updateMt(playerNum);
@@ -297,7 +314,7 @@ public class UI {
      **/
     // makes a Team from teamNames & weaponNames by initiating the characters and returns the created Team.
     // TODO: Add Wyrmprints here.
-    private Team makeTeam() {
+    private void makeTeam() {
         Char[] returnTeam = new Char[4];
         for (int i = 0; i < 4; i++) {
             System.out.println("\n♦ ♦ ♦ Initializing P" + (i + 1) + " as " + teamNames[i]);
@@ -307,8 +324,7 @@ public class UI {
             Char.setNewMt(c);
         }
         this.teamChars = returnTeam;
-
-        return new Team(returnTeam);
+        new Team(returnTeam);
     }
 
     /**
@@ -318,11 +334,14 @@ public class UI {
     private void setupSVolk() {
         this.fGamePlay = new JFrame("sVOLK_v2");
         fGamePlay.setResizable(true);
-        GPInitImages();
+        GPInitGraphics();
         GPInitFrame();
+        gameRunning = true;
+        GPInitGame();
     }
 
-    private void GPInitImages() { // todo unfinished function; need to init other static images.
+    // loads the sVOLK bkg and then calls player bars initiation.
+    private void GPInitGraphics() {
         try {
             final Image gameplayBKG = ImageIO.read(new File(GAMEPLAY_BKG_LOCATION));
             fGamePlay.setContentPane(new JPanelBkg(gameplayBKG));
@@ -344,18 +363,50 @@ public class UI {
         fGamePlay.setVisible(true);
     }
 
-    // todo documentation
+    // sets the 4 element lil circles in the middle of the screen
     private void configurePlayerBars() {
         for (int i = 0; i < 4; i++) {
-            switch(teamChars[0].getElem()) {
+            switch (teamChars[i].getElem()) {
                 case "Flame":
-                    JLabel icon = new JLabel(FIRE_ICON);
-                    icon.setBounds(ELEM_ICON_X, (ELEM_ICON_Y + ICON_Y_INCREMENT * i), ELEM_ICON_SIZE, ELEM_ICON_SIZE);
-                    fGamePlay.add(icon);
+                    JLabel elemIcon = new JLabel(FIRE_ICON);
+                    elemIcon.setBounds(ELEM_ICON_X, (ELEM_ICON_Y + ICON_Y_INCREMENT * i), ELEM_ICON_SIZE, ELEM_ICON_SIZE);
+                    fGamePlay.add(elemIcon);
+                    break;
+                case "Wind":
+                    // todo add wind
                     break;
                 default:
-                    throw new RuntimeException("Cannot determine the element of P" + (i+1));
+                    throw new RuntimeException("Cannot determine the element of P" + (i + 1));
             }
+
+            Image unsizedCharPic = new ImageIcon(IMG_LOCATION + "chars/" + teamChars[i].getName() + ".png").getImage();
+
+            JLabel charSidePic = new JLabel(new ImageIcon(unsizedCharPic));
+            charSidePic.setBounds(CHAR_SIDE_PIC_X, (CHAR_SIDE_PIC_Y + CHAR_SIDE_PIC_INCREMENT * i), CHAR_SIDE_PIC_SIZE, CHAR_SIDE_PIC_SIZE);
+            fGamePlay.add(charSidePic);
+
+            JLabel charMiddlePic = new JLabel(new ImageIcon((unsizedCharPic.getScaledInstance(CHAR_MIDDLE_PIC_SIZE, CHAR_MIDDLE_PIC_SIZE, Image.SCALE_DEFAULT))));
+            charMiddlePic.setBounds(CHAR_MIDDLE_PIC_X, (CHAR_MIDDLE_PIC_Y + ICON_Y_INCREMENT * i), CHAR_MIDDLE_PIC_SIZE, CHAR_MIDDLE_PIC_SIZE);
+            fGamePlay.add(charMiddlePic);
         }
     }
+
+    // todo
+    // this so far only works for player 1, person 1.
+    private void GPInitGame() {
+        fGamePlay.add(new JPanelPlay());
+        fGamePlay.setVisible(true);
+        // place p1 marker at coordinate x, y
+        /**
+         * X) import marker images as imageicons
+         * 1.5) check that enterkeys works via println
+         * 2) when game starts, initiate the marker at (5, 9)
+         * 3) when arrowkey pressed, move marker in the correct direction by CONSTANT pixels
+         * 4) check that when arrowkey pressed, the person can actually move up or whatever
+         * 5) plop a volk at (7, 7)
+         * 6) when ya run into volk u move up two instead of 1
+         * 7) do damage to volk when "f" is pressed (not held) and volk is within WEP_DEP_CONSTANT squares.
+         */
+    }
+
 }

@@ -1,5 +1,8 @@
 package util;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 public class Char {
 
     // refer to char_info.txt for unabbreviated versions.
@@ -36,6 +39,11 @@ public class Char {
         this.def = def;
         this.w = w;
 
+        int locationX;
+        int locationY;
+        boolean p1Char;
+        boolean inControl;
+
     }
 
     public String toString() {
@@ -71,6 +79,16 @@ public class Char {
         for (Skill skill : cSkills) {
             c.printSkills(skill);
         }
+    }
+
+    // GamePlay ========================================================================================================
+    // controls character play.
+    public void charPlay(){
+        
+    }
+
+    public void placeChar(int x, int y) {
+        // todo
     }
 
     // Get variable values =============================================================================================
@@ -110,28 +128,32 @@ public class Char {
         return this.elem;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public int getMt() {
         return this.mt;
     }
 
     // Other helper functions ==========================================================================================
-    public void printAbilities(Ability ability) {
+    public void printAbilities(@NotNull Ability ability) {
         System.out.println(name + "'s ability is " + ability.toString());
     }
 
-    public void printSkills(Skill skill) {
+    public void printSkills(@NotNull Skill skill) {
         System.out.println(name + "'s skill is " + skill.toString());
     }
 
-    public static Char copy(Char c) {
+    public static Char copy(@NotNull Char c) {
         return new Char(c.name, c.elem, c.wT, c.s1N, c.s2N, c.a1, c.a2, c.a3, c.cc, c.ct, c.mt, c.hp, c.str, c.def, c.w);
     }
 
-    public static void setNewMt(Char c) {
+    public static void setNewMt(@NotNull Char c) {
         c.mt = getNewMt(c.name, c.w);
     }
 
-    public static int getNewMt(String name, Weapon w) {
+    public static int getNewMt(@NotNull String name, @NotNull Weapon w) {
         Char targetChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(name);
         int might = targetChar.mt;
 
