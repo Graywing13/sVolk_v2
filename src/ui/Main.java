@@ -3,6 +3,8 @@ package ui;
 import util.ProcessTxt;
 
 public class Main {
+    public UI ui;
+
     public Main() {
         System.out.println("sVolk_v2 started.");
     }
@@ -20,7 +22,7 @@ public class Main {
         ProcessTxt.initDictionary(ProcessTxt.SKILLS_DICT_LOCATION, "\\w+(\\s\\w+)*,\\d+,\\d+(\\.\\d+)?(,(true|false)){2}(,\\d+){4}(,\\w+(-\\d+(\\.\\d+)?)*,\\d+(\\.\\d+)?){3}");
         ProcessTxt.initDictionary(ProcessTxt.WEAPONS_DICT_LOCATION, "\\w+(\\s\\w+)*(,\\w+){2}(,\\d+){4},\\w+(\\s-)?(\\s\\w+)*");
 
-        UI ui = new UI();
+        ui = new UI();
     }
 
 }

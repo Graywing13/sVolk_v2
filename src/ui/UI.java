@@ -48,18 +48,20 @@ public class UI {
     private static final int CHAR_SIDE_PIC_X = 36;
     private static final int CHAR_SIDE_PIC_Y = 63;
     private static final int CHAR_SIDE_PIC_SIZE = 64;
-    private static final int ARENA_SIZE = 13;
-
+    public static final int GRID_X = 539;
+    public static final int GRID_Y = 291;
+    public static final int GRID_SQUARE_SIDE_LENGTH = 18;
+    public static final int GRID_SQUARE_DISTANCE = 23;
 
     private static final Color DEFAULT_BKG = new Color(0, 0, 0);
     private static final String IMG_LOCATION = "././data/img/";
-    private static final String GAMEPLAY_BKG_LOCATION = IMG_LOCATION + "gameplayBKGv3.png";
+    private static final String GAMEPLAY_BKG_LOCATION = IMG_LOCATION + "gameplayBKGv4.png";
     private static final ImageIcon SVOLK_LOGO_ICON = new ImageIcon(IMG_LOCATION + "sVolkLogo.png");
-    private static final ImageIcon P1_BIG_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P1Big.png");
-    private static final ImageIcon P1_SMALL_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P1Small.png");
-    private static final ImageIcon P2_BIG_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P2Big.png");
-    private static final ImageIcon P2_SMALL_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P2Small.png");
-    private static final ImageIcon SVOLK_ICON = new ImageIcon(IMG_LOCATION + "VolkMarker.png");
+    public static final ImageIcon P1_BIG_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P1Big.png");
+    public static final ImageIcon P1_SMALL_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P1Small.png");
+    public static final ImageIcon P2_BIG_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P2Big.png");
+    public static final ImageIcon P2_SMALL_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P2Small.png");
+    public static final ImageIcon SVOLK_ICON = new ImageIcon(IMG_LOCATION + "VolkMarker.png");
     private static final ImageIcon FIRE_ICON = new ImageIcon(IMG_LOCATION + "FireLogo.png");
 
     // CONSTANTS CALLED AFTER INITIALIZATION
@@ -67,11 +69,12 @@ public class UI {
     Char defaultChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(availChars[0]);
 
     // VARIABLES FOR THE GAME
-    private boolean gameRunning;
-
-    // VARIABLES FOR THE TEAM
+    private boolean gameRunning; // todo remove?
+    public JPanelPlay JPP;
     private JFrame fChooseTeam;
     private JFrame fGamePlay;
+
+    // VARIABLES FOR THE TEAM
     private Char[] teamChars;
     private String[] teamNames;
     private String[] weaponNames;
@@ -391,22 +394,34 @@ public class UI {
         }
     }
 
-    // todo
-    // this so far only works for player 1, person 1.
+    // starts the game up. // todo rename all these to more logical things and maybe draw a map who knows
     private void GPInitGame() {
-        fGamePlay.add(new JPanelPlay());
+        JPP = new JPanelPlay(teamChars);
+        fGamePlay.add(JPP);
         fGamePlay.setVisible(true);
-        // place p1 marker at coordinate x, y
+        determineMarkerTypes();
+
+        // initiate and place player markers at coordinate x, y; todo turn this into its own function?
+        fGamePlay.add(teamChars[0].setCharMarker(5, 9, JPP));
+        fGamePlay.add(teamChars[1].setCharMarker(3, 9, JPP));
+        fGamePlay.repaint();
+        //play(); // todo
+
         /**
          * X) import marker images as imageicons
-         * 1.5) check that enterkeys works via println
-         * 2) when game starts, initiate the marker at (5, 9)
-         * 3) when arrowkey pressed, move marker in the correct direction by CONSTANT pixels
-         * 4) check that when arrowkey pressed, the person can actually move up or whatever
+         * X) check that enterkeys works via println
+         * X) when game starts, initiate the marker at (5, 9)
+         * X) when arrowkey pressed, move marker in the correct direction by CONSTANT pixels
+         * X) check that when arrowkey pressed, the person can actually move up or whatever
          * 5) plop a volk at (7, 7)
          * 6) when ya run into volk u move up two instead of 1
          * 7) do damage to volk when "f" is pressed (not held) and volk is within WEP_DEP_CONSTANT squares.
          */
+    }
+
+    private void determineMarkerTypes() { // todo add to this + modify it to depend on whatever
+        teamChars[0].setMarker(true, true);
+        teamChars[1].setMarker(false, true);
     }
 
 }
