@@ -52,6 +52,7 @@ public class UI {
     public static final int GRID_Y = 291;
     public static final int GRID_SQUARE_SIDE_LENGTH = 18;
     public static final int GRID_SQUARE_DISTANCE = 23;
+    private static final int ARENA_SIZE = 13;
 
     private static final Color DEFAULT_BKG = new Color(0, 0, 0);
     private static final String IMG_LOCATION = "././data/img/";
@@ -66,13 +67,15 @@ public class UI {
 
     // CONSTANTS CALLED AFTER INITIALIZATION
     private String[] availChars = ProcessTxt.findAvailChars();
-    Char defaultChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(availChars[0]);
+    private Char defaultChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(availChars[0]);
+    public GridSquare[] grid_13x13 = new GridSquare[ARENA_SIZE * ARENA_SIZE];
 
     // VARIABLES FOR THE GAME
     private boolean gameRunning; // todo remove?
     public JPanelPlay JPP;
     private JFrame fChooseTeam;
     private JFrame fGamePlay;
+    public static Enemy sVolk;
 
     // VARIABLES FOR THE TEAM
     private Char[] teamChars;
@@ -142,6 +145,7 @@ public class UI {
         nextB.addActionListener(e -> {
             makeTeam();
             setupSVolk();
+            fChooseTeam.setVisible(false);
         });
 
         fChooseTeam.add(nextB);
@@ -394,16 +398,39 @@ public class UI {
         }
     }
 
+    // makes the grid that movement is based on.
+    private void initGridSquares() {
+        int i = 0;
+        for (int x = 0; x < ARENA_SIZE; x++) {
+            for (int y = 0; y < ARENA_SIZE; y++) {
+                grid_13x13[i] = new GridSquare(x, y);
+                i++;
+            }
+        }
+
+        GridSquare.wipeVoidSquares(grid_13x13);
+
+        for (GridSquare sqr : grid_13x13) {
+            if (!(sqr == null)) {
+                fGamePlay.add(sqr.initSquare());
+            }
+        }
+    }
+
     // starts the game up. // todo rename all these to more logical things and maybe draw a map who knows
     private void GPInitGame() {
         JPP = new JPanelPlay(teamChars);
         fGamePlay.add(JPP);
         fGamePlay.setVisible(true);
         determineMarkerTypes();
+        sVolk = new Enemy(JPP);
+        initGridSquares();
 
         // initiate and place player markers at coordinate x, y; todo turn this into its own function?
-        fGamePlay.add(teamChars[0].setCharMarker(5, 9, JPP));
-        fGamePlay.add(teamChars[1].setCharMarker(3, 9, JPP));
+        fGamePlay.add(teamChars[0].setCharMarker(4, 8, JPP));
+        fGamePlay.add(teamChars[1].setCharMarker(2, 8, JPP));
+
+        fGamePlay.add(sVolk.setVolkMarker(6, 6));
         fGamePlay.repaint();
         //play(); // todo
 
@@ -413,8 +440,8 @@ public class UI {
          * X) when game starts, initiate the marker at (5, 9)
          * X) when arrowkey pressed, move marker in the correct direction by CONSTANT pixels
          * X) check that when arrowkey pressed, the person can actually move up or whatever
-         * 5) plop a volk at (7, 7)
-         * 6) when ya run into volk u move up two instead of 1
+         * X) plop a volk at (7, 7)
+         * X) when ya run into volk u move up two instead of 1
          * 7) do damage to volk when "f" is pressed (not held) and volk is within WEP_DEP_CONSTANT squares.
          */
     }

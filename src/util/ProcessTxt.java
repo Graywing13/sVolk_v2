@@ -9,6 +9,7 @@ public class ProcessTxt {
     // General Constants
     public final static List<String> ELEMENTS = Arrays.asList("Flame", "Light", "None", "Shadow", "Water", "Wind");
     public final static List<String> WEAPON_TYPES = Arrays.asList("Axe", "Blade", "Bow", "Dagger", "Lance", "Staff", "Sword", "Wand");
+    public final static List<Integer> WEAPON_RANGE = Arrays.asList(1, 2, 4, 1, 3, 4, 1, 4); // todo think of a better way to store these values.
 
     // Dictionary Constants
     public final static String ABILITIES_DICT_LOCATION = "./data/dict/abilities.txt";

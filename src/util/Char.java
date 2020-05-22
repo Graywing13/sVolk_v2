@@ -93,7 +93,7 @@ public class Char {
         }
     }
 
-    // GamePlay ========================================================================================================
+    // Markers =========================================================================================================
     // decides on the marker Image for the character
     public void setMarker(boolean p1, boolean control) {
         p1Char = p1;
@@ -126,6 +126,7 @@ public class Char {
         return charMarker;
     }
 
+    // Character Movement ==============================================================================================
     // processes information from arrow keys and places the character at the new location
     public void moveChar(int key, boolean modifier) {
         if (!modifier) {
@@ -140,13 +141,13 @@ public class Char {
         if (key == 32) {
             System.out.println("Pause Pressed"); // todo edit
         } else if (MOVE_DOWN.contains(key)) {
-            placeChar(locationX, locationY + 1);
+            moveDown();
         } else if (MOVE_UP.contains(key)) {
-            placeChar(locationX, locationY - 1);
+            moveUp();
         } else if (MOVE_LEFT.contains(key)) {
-            placeChar(locationX - 1, locationY);
+            moveLeft();
         } else if (MOVE_RIGHT.contains(key)) {
-            placeChar(locationX + 1, locationY);
+            moveRight();
         } else if (MOVE_HIT.contains(key)) {
             System.out.println("Attacking"); // todo edit
         } else {
@@ -156,8 +157,38 @@ public class Char {
 
     // does a modified char movement; see more in JPanelPlay
     private void moveCharModifier(int key) {
-        if (MOVE_DOWN.contains(key)) {
+        // todo edit
+    }
+
+    private void moveUp() {
+        if (locationX == UI.sVolk.getLocationX() && locationY == UI.sVolk.getLocationY() + 1) {
+            placeChar(locationX, locationY - 2);
+        } else {
+            placeChar(locationX, locationY - 1);
+        }
+    }
+
+    private void moveDown() {
+        if (locationX == UI.sVolk.getLocationX() && locationY == UI.sVolk.getLocationY() - 1) {
+            placeChar(locationX, locationY + 2);
+        } else {
             placeChar(locationX, locationY + 1);
+        }
+    }
+
+    private void moveRight() {
+        if (locationY == UI.sVolk.getLocationY() && locationX == UI.sVolk.getLocationX() - 1) {
+            placeChar(locationX + 2, locationY);
+        } else {
+            placeChar(locationX + 1, locationY);
+        }
+    }
+
+    private void moveLeft() {
+        if (locationY == UI.sVolk.getLocationY() && locationX == UI.sVolk.getLocationX() + 1) {
+            placeChar(locationX - 2, locationY);
+        } else {
+            placeChar(locationX - 1, locationY);
         }
     }
 
