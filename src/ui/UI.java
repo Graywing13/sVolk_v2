@@ -58,12 +58,14 @@ public class UI {
     private static final String IMG_LOCATION = "././data/img/";
     private static final String GAMEPLAY_BKG_LOCATION = IMG_LOCATION + "gameplayBKGv4.png";
     private static final ImageIcon SVOLK_LOGO_ICON = new ImageIcon(IMG_LOCATION + "sVolkLogo.png");
-    public static final ImageIcon P1_BIG_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P1Big.png");
-    public static final ImageIcon P1_SMALL_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P1Small.png");
-    public static final ImageIcon P2_BIG_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P2Big.png");
-    public static final ImageIcon P2_SMALL_MARKER_ICON = new ImageIcon(IMG_LOCATION + "P2Small.png");
-    public static final ImageIcon SVOLK_ICON = new ImageIcon(IMG_LOCATION + "VolkMarker.png");
+    public static final String P1_BIG_MARKER_LOCATION = IMG_LOCATION + "P1Big.png";
+    public static final String P1_SMALL_MARKER_LOCATION = IMG_LOCATION + "P1Small.png";
+    public static final String P2_BIG_MARKER_LOCATION = IMG_LOCATION + "P2Big.png";
+    public static final String P2_SMALL_MARKER_LOCATION = IMG_LOCATION + "P2Small.png";
+    public static final String VOLK_MARKER_LOCATION = IMG_LOCATION + "VolkMarker.png";
     private static final ImageIcon FIRE_ICON = new ImageIcon(IMG_LOCATION + "FireLogo.png");
+    public static final double CHAR_DIRXN_INIT = Math.PI / 4;
+    public static final double VOLK_DIRXN_INIT = 5 * Math.PI / 4;
 
     // CONSTANTS CALLED AFTER INITIALIZATION
     private String[] availChars = ProcessTxt.findAvailChars();
@@ -144,7 +146,11 @@ public class UI {
         nextB.setBounds(CT_NEXT_X, CT_NEXT_Y, CT_NEXT_WIDTH, CT_FIELD_HEIGHT);
         nextB.addActionListener(e -> {
             makeTeam();
-            setupSVolk();
+            try {
+                setupSVolk();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             fChooseTeam.setVisible(false);
         });
 
@@ -338,7 +344,7 @@ public class UI {
      * GAMEPLAY INITIALIZATION
      */
     // calls necessary initiation functions for sVolk Gameplay stage.
-    private void setupSVolk() {
+    private void setupSVolk() throws IOException {
         this.fGamePlay = new JFrame("sVOLK_v2");
         fGamePlay.setResizable(true);
         GPInitGraphics();
@@ -418,17 +424,14 @@ public class UI {
     }
 
     // starts the game up. // todo rename all these to more logical things and maybe draw a map who knows
-    private void GPInitGame() {
+    private void GPInitGame() throws IOException {
         JPP = new JPanelPlay(teamChars);
         fGamePlay.add(JPP);
         fGamePlay.setVisible(true);
         determineMarkerTypes();
         sVolk = new Enemy(JPP);
         initGridSquares();
-
-        // initiate and place player markers at coordinate x, y; todo turn this into its own function?
-        fGamePlay.add(teamChars[0].setCharMarker(4, 8, JPP));
-        fGamePlay.add(teamChars[1].setCharMarker(2, 8, JPP));
+        placePlayers();
 
         fGamePlay.add(sVolk.setVolkMarker(6, 6));
         fGamePlay.repaint();
@@ -442,11 +445,17 @@ public class UI {
          * X) check that when arrowkey pressed, the person can actually move up or whatever
          * X) plop a volk at (7, 7)
          * X) when ya run into volk u move up two instead of 1
-         * 7) do damage to volk when "f" is pressed (not held) and volk is within WEP_DEP_CONSTANT squares.
+         * 7) do damage to volk when "f" is pressed (not held) and volk is within WEP_DEP_CONSTANT squares. // todo
          */
     }
 
-    private void determineMarkerTypes() { // todo add to this + modify it to depend on whatever
+    private void placePlayers() throws IOException { // todo add the other characters.
+        // initiate and place player markers at coordinate x, y
+        fGamePlay.add(teamChars[0].setCharMarker(4, 8, JPP));
+        fGamePlay.add(teamChars[1].setCharMarker(2, 8, JPP));
+    }
+
+    private void determineMarkerTypes() { // todo add to this + modify it to depend on user input...
         teamChars[0].setMarker(true, true);
         teamChars[1].setMarker(false, true);
     }

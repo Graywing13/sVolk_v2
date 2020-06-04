@@ -18,7 +18,7 @@ public class Enemy {
 
     // initializes Volk's marker, calls placeVolk for placement.
     public JLabel setVolkMarker(int x, int y) {
-        volkMarker = new JLabel(UI.SVOLK_ICON);
+        volkMarker = new RotateLabel(UI.VOLK_MARKER_LOCATION, UI.VOLK_DIRXN_INIT);
         placeVolk(x, y);
         return volkMarker;
     }

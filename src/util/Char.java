@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ui.UI;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -100,19 +101,19 @@ public class Char {
         inControl = control;
     }
     // gives the character a marker and correspondingly sets that character in control's focus
-    public JLabel setCharMarker(int x, int y, JPanelPlay jpp){
+    public JLabel setCharMarker(int x, int y, JPanelPlay jpp) throws IOException {
         if (inControl) {
             if (p1Char) {
-                charMarker = new JLabel(UI.P1_BIG_MARKER_ICON);
+                charMarker = new RotateLabel("./" + UI.P1_BIG_MARKER_LOCATION, UI.CHAR_DIRXN_INIT);
             } else {
-                charMarker = new JLabel(UI.P2_BIG_MARKER_ICON);
+                charMarker = new RotateLabel("./" + UI.P2_BIG_MARKER_LOCATION, UI.CHAR_DIRXN_INIT);
             }
             jpp.changeControl(p1Char, this);
         } else {
             if (p1Char) {
-                charMarker = new JLabel(UI.P1_SMALL_MARKER_ICON);
+                charMarker = new RotateLabel("./" + UI.P1_SMALL_MARKER_LOCATION, UI.CHAR_DIRXN_INIT);
             } else {
-                charMarker = new JLabel(UI.P2_SMALL_MARKER_ICON);
+                charMarker = new RotateLabel("./" + UI.P2_SMALL_MARKER_LOCATION, UI.CHAR_DIRXN_INIT);
             }
         }
         return placeChar(x, y);
