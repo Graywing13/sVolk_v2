@@ -8,8 +8,6 @@ public class ProcessTxt {
 
     // General Constants
     public final static List<String> ELEMENTS = Arrays.asList("Flame", "Light", "None", "Shadow", "Water", "Wind");
-    public final static List<String> WEAPON_TYPES = Arrays.asList("Axe", "Blade", "Bow", "Dagger", "Lance", "Staff", "Sword", "Wand");
-    public final static List<Integer> WEAPON_RANGE = Arrays.asList(1, 2, 4, 1, 3, 4, 1, 4); // todo think of a better way to store these values.
 
     // Dictionary Constants
     public final static String ABILITIES_DICT_LOCATION = "./data/dict/abilities.txt";
@@ -207,7 +205,7 @@ public class ProcessTxt {
     }
 
     private static void validWeaponType(String wT) {
-        if (!WEAPON_TYPES.contains(wT)) throw new RuntimeException("The weapon type " + wT + " is invalid.");
+        if (!Weapon.WEAPON_TYPES.contains(wT)) throw new RuntimeException("The weapon type " + wT + " is invalid.");
     }
 
     private static void noDuplicates(HashMap<String, ?> dictionary, String key, String entry, String fileLocation) {

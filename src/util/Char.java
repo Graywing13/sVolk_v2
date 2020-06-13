@@ -17,6 +17,12 @@ public class Char {
     private static final HashSet<Integer> MOVE_RIGHT = new HashSet<>(Arrays.asList(68, 39));
     private static final HashSet<Integer> MOVE_HIT = new HashSet<>(Arrays.asList(70, 17, 157));
 
+    // Skill / Player switch directions
+    private static final HashSet<Integer> KEY_1 = new HashSet<>(Arrays.asList(49, 55));
+    private static final HashSet<Integer> KEY_2 = new HashSet<>(Arrays.asList(50, 56));
+    private static final HashSet<Integer> KEY_3 = new HashSet<>(Arrays.asList(51, 57));
+    private static final HashSet<Integer> KEY_4 = new HashSet<>(Arrays.asList(52, 48));
+
 
     // refer to char_info.txt for unabbreviated versions.
     String name;
@@ -36,9 +42,11 @@ public class Char {
 
     private boolean p1Char;
     private boolean inControl;
-    private JLabel charMarker;
+    private RotateLabel charMarker;
     private int locationX;
     private int locationY;
+    private int volkX;
+    private int volkY;
 
     // The Defaults ====================================================================================================
     public Char(String name, String elem, String wT, String s1N, String s2N, String a1, String a2, String a3, String cc, String ct, int mt, int hp, int str, int def, Weapon w) {
@@ -130,6 +138,8 @@ public class Char {
     // Character Movement ==============================================================================================
     // processes information from arrow keys and places the character at the new location
     public void moveChar(int key, boolean modifier) {
+        volkX = UI.sVolk.getLocationX();
+        volkY = UI.sVolk.getLocationY();
         if (!modifier) {
             moveCharRegular(key);
         } else {
@@ -139,9 +149,7 @@ public class Char {
 
     // does a regular char movement; see more in JPanelPlay
     private void moveCharRegular(int key) {
-        if (key == 32) {
-            System.out.println("Pause Pressed"); // todo edit
-        } else if (MOVE_DOWN.contains(key)) {
+        if (MOVE_DOWN.contains(key)) {
             moveDown();
         } else if (MOVE_UP.contains(key)) {
             moveUp();
@@ -150,47 +158,71 @@ public class Char {
         } else if (MOVE_RIGHT.contains(key)) {
             moveRight();
         } else if (MOVE_HIT.contains(key)) {
-            System.out.println("Attacking"); // todo edit
+            attack();
+        } else if (KEY_1.contains(key)) {
+            System.out.println("Using S1"); // todo add guard later on to make sure s1 is actually available etc
+        } else if (KEY_2.contains(key)) {
+            System.out.println("Using s2");
+        } else if (KEY_3.contains(key)) {
+            System.out.println("Using s3");
         } else {
-            throw new RuntimeException("The following invalid key was passed: " + key);
+            throw new RuntimeException("The following invalid regular key was passed: " + key);
         }
     }
 
     // does a modified char movement; see more in JPanelPlay
     private void moveCharModifier(int key) {
-        // todo edit
+        if (KEY_1.contains(key)) {
+            System.out.println("Shifting into p1"); // todo add guard later on to make sure p1 exists etc.
+        } else if (KEY_2.contains(key)) {
+            System.out.println("Shifting into p2");
+        } else if (KEY_3.contains(key)) {
+            System.out.println("Shifting into p3");
+        } else if (KEY_4.contains(key)) {
+            System.out.println("Shifting into p4");
+        } else {
+            throw new RuntimeException("The following invalid modifier key was passed: " + key);
+        }
     }
 
     private void moveUp() {
-        if (locationX == UI.sVolk.getLocationX() && locationY == UI.sVolk.getLocationY() + 1) {
+        if (locationX == volkX && locationY == volkY + 1) {
             placeChar(locationX, locationY - 2);
         } else {
             placeChar(locationX, locationY - 1);
         }
+        this.charMarker.changeAngle(0);
     }
 
     private void moveDown() {
-        if (locationX == UI.sVolk.getLocationX() && locationY == UI.sVolk.getLocationY() - 1) {
+        if (locationX == volkX && locationY == volkY - 1) {
             placeChar(locationX, locationY + 2);
         } else {
             placeChar(locationX, locationY + 1);
         }
+        this.charMarker.changeAngle(Math.PI);
     }
 
     private void moveRight() {
-        if (locationY == UI.sVolk.getLocationY() && locationX == UI.sVolk.getLocationX() - 1) {
+        if (locationY == volkY && locationX == volkX - 1) {
             placeChar(locationX + 2, locationY);
         } else {
             placeChar(locationX + 1, locationY);
         }
+        this.charMarker.changeAngle(Math.PI / 2);
     }
 
     private void moveLeft() {
-        if (locationY == UI.sVolk.getLocationY() && locationX == UI.sVolk.getLocationX() + 1) {
+        if (locationY == volkY && locationX == volkX + 1) {
             placeChar(locationX - 2, locationY);
         } else {
             placeChar(locationX - 1, locationY);
         }
+        this.charMarker.changeAngle(3 * Math.PI / 2);
+    }
+    
+    private void attack() {
+        System.out.format("Attacking Volk @%d, %d from %d, %d%n", volkX, volkY, locationX, locationY); // todo edit
     }
 
     // Get variable values =============================================================================================

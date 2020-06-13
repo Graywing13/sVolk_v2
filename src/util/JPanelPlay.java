@@ -10,10 +10,10 @@ import java.util.List;
 
 public class JPanelPlay extends JPanel implements KeyListener {
 
-    private static final List<Integer> REGULAR_CODES_ALT = Arrays.asList(32, 37, 38, 39, 40, 55, 56, 57, 17, 157); // SPACE, ARROWS, NUMS 7-9, CTRL, CMD
     private static final List<Integer> REGULAR_CODES_SHIFT = Arrays.asList(49, 50, 51, 65, 68, 70, 83, 87); // NUMS 1-3, a, d, f, s, w
-    private static final List<Integer> MODIFIER_CODES_SHIFT = Arrays.asList(17, 157, 40, 49, 50, 51, 52); // CTRL, CMD, DOWN ARROW, NUMS 1-4
-    private static final List<Integer> MODIFIER_CODES_ALT= Arrays.asList(70, 83, 55, 56, 57, 48); // F, S, NUMS 7-0
+    private static final List<Integer> REGULAR_CODES_ALT = Arrays.asList(37, 38, 39, 40, 55, 56, 57, 17, 157); // ARROWS, NUMS 7-9, CTRL, CMD
+    private static final List<Integer> MODIFIER_CODES_SHIFT = Arrays.asList(70, 83, 49, 50, 51, 52); // F, S, NUMS 1-4
+    private static final List<Integer> MODIFIER_CODES_ALT= Arrays.asList(17, 157, 40, 55, 56, 57, 48); // CTRL, CMD, DOWN ARROW, NUMS 7-0
 
     private Char[] teamChars;
     private Char p1Control;
@@ -36,27 +36,31 @@ public class JPanelPlay extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        if (e.getModifiersEx() != 0 && !e.isControlDown() && !e.isMetaDown()) {
-            if (MODIFIER_CODES_ALT.contains(code)) {
-                if (e.isAltDown()) {
+        if (code == 32) { // SPACE key
+            System.out.println("General: Pressed " + code); //todo EDIT.
+        } else if (e.getModifiersEx() != 0 && (e.isAltDown() || e.isShiftDown())) {
+            if (e.isAltDown()) {
+                if (MODIFIER_CODES_ALT.contains(code)) {
                     System.out.println("Pressed ALT + " + code);//todo remove
-                } else {
-                    System.out.println("Pressed " + code);//todo remove
+                } else if (!e.isShiftDown() && REGULAR_CODES_SHIFT.contains(code)){
+                    System.out.println("(P1) Pressed " + code);//todo remove
+                    p1Control.moveChar(code, false);
                 }
             }
-            if (MODIFIER_CODES_SHIFT.contains(code)) {
-                if (e.isShiftDown()) {
+            if (e.isShiftDown()) {
+                if (MODIFIER_CODES_SHIFT.contains(code)) {
                     System.out.println("Pressed SHIFT + " + code);//todo remove
-                } else {
-                    System.out.println("Pressed " + code);//todo remove
+                } else if (!e.isAltDown() && REGULAR_CODES_ALT.contains(code)){
+                    System.out.println("(P2) Pressed " + code);//todo remove
+                    p2Control.moveChar(code, false);
                 }
             }
         } else if (REGULAR_CODES_SHIFT.contains(code)) {
+            System.out.println("(P1) Pressed " + code);//todo remove
             p1Control.moveChar(code, false);
-            System.out.println("Pressed " + code);//todo remove
         } else if (REGULAR_CODES_ALT.contains(code)) {
+            System.out.println("(P2) Pressed " + code);//todo remove
             p2Control.moveChar(code, false);
-            System.out.println("Pressed " + code);//todo remove
         }
     }
 

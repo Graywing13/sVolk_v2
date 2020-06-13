@@ -77,7 +77,7 @@ public class UI {
     public JPanelPlay JPP;
     private JFrame fChooseTeam;
     private JFrame fGamePlay;
-    public static Enemy sVolk;
+    public static Enemy sVolk; // todo see if i can make this nonstatic
 
     // VARIABLES FOR THE TEAM
     private Char[] teamChars;
