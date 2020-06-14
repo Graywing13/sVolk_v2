@@ -414,10 +414,10 @@ public class UI {
             }
         }
 
-        GridSquare.wipeVoidSquares(grid_13x13);
+        GridSquare.editSqrStates(grid_13x13);
 
         for (GridSquare sqr : grid_13x13) {
-            if (!(sqr == null)) {
+            if (!(sqr.getSqrState() == 'n')) {
                 fGamePlay.add(sqr.initSquare());
             }
         }
