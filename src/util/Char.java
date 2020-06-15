@@ -4,11 +4,13 @@ import org.jetbrains.annotations.NotNull;
 import ui.UI;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 
 public class Char {
+
+    // used for checking location relative to map
+    private JPanelPlay jpp;
 
     // movement directions
     private static final HashSet<Integer> MOVE_DOWN = new HashSet<>(Arrays.asList(83, 40));
@@ -108,9 +110,11 @@ public class Char {
         p1Char = p1;
         inControl = control;
     }
+
     // gives the character a marker and correspondingly sets that character in control's focus
-    public JLabel setCharMarker(int x, int y, JPanelPlay jpp) throws IOException {
+    public JLabel setCharMarker(int x, int y, JPanelPlay jpp) {
         if (inControl) {
+            this.jpp = jpp;
             if (p1Char) {
                 charMarker = new RotateLabel("./" + UI.P1_BIG_MARKER_LOCATION, UI.CHAR_DIRXN_INIT);
             } else {
@@ -150,13 +154,13 @@ public class Char {
     // does a regular char movement; see more in JPanelPlay
     private void moveCharRegular(int key) {
         if (MOVE_DOWN.contains(key)) {
-            moveDown();
+            move(0, 1);
         } else if (MOVE_UP.contains(key)) {
-            moveUp();
+            move(0, -1);
         } else if (MOVE_LEFT.contains(key)) {
-            moveLeft();
+            move(-1, 0);
         } else if (MOVE_RIGHT.contains(key)) {
-            moveRight();
+            move(1, 0);
         } else if (MOVE_HIT.contains(key)) {
             attack();
         } else if (KEY_1.contains(key)) {
@@ -185,13 +189,23 @@ public class Char {
         }
     }
 
-    private void moveUp() {
-        if (locationX == volkX && locationY == volkY + 1) {
-            placeChar(locationX, locationY - 2);
+    // moves a player 1 square in the 4 cardinal directions.
+    /*
+     * variables:
+     *    - moveX: the x-distance that the desired move moves the character (-1 is left, 1 is right)
+     *    - moveY: the y-distance that the desired move moves the character (-1 is up, 1 is down)
+     */
+    private void move(int moveX, int moveY) {
+        if (locationX == (volkX + moveX * -1) && locationY == (volkY + moveY * -1)) {
+            placeChar(locationX + 2 * moveX, locationY + 2 * moveY);
         } else {
-            placeChar(locationX, locationY - 1);
+            int tryX = locationX + moveX;
+            int tryY = locationY + moveY;
+            if (tryX >= 0 && tryY >= 0 && tryX < UI.ARENA_SIZE && tryY < UI.ARENA_SIZE && !(jpp.grid[tryX * 13 + tryY].getSqrState() == 'n')) {
+                placeChar(locationX + moveX, locationY + moveY);
+            }
         }
-        this.charMarker.changeAngle(0);
+        this.charMarker.changeAngle(Math.PI / 2 * (moveX * moveX * (2 - moveX) + moveY * (1 + moveY)));
     }
 
     private void moveDown() {
@@ -220,7 +234,7 @@ public class Char {
         }
         this.charMarker.changeAngle(3 * Math.PI / 2);
     }
-    
+
     private void attack() {
         System.out.format("Attacking Volk @%d, %d from %d, %d%n", volkX, volkY, locationX, locationY); // todo edit
     }

@@ -18,10 +18,12 @@ public class JPanelPlay extends JPanel implements KeyListener {
     private Char[] teamChars;
     private Char p1Control;
     private Char p2Control;
+    public GridSquare[] grid;
 
-    public JPanelPlay(Char[] teamChars) {
+    public JPanelPlay(Char[] teamChars, GridSquare[] grid) {
         addKeyListener(this);
         this.teamChars = teamChars;
+        this.grid = grid;
     }
 
     @Override

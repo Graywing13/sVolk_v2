@@ -12,7 +12,7 @@ public class GridSquare {
     Small Description
     This builds the circular grid that the characters and Volk move on.
     The 13x13 grid of GridSquares is described in 0-based coordinates, where the top left is 0, 0 and the bottom right is 12, 12.
-    The GridSquare point (7, 6) has a xComponent of 7 and a yComponent of 6.
+    The GridSquare point (7, 6) has a xComponent of 7 and a yComponent of 6. It has an GridSquare[] index of 7*13+6 = 97 (in classes UI and Char).
      */
 
     // Components go row by row from the top tow to the bottom row.
@@ -47,15 +47,15 @@ public class GridSquare {
 
     public static void editSqrStates(GridSquare[] grid) {
 
-        assert(grid.length == 169);
+        assert(grid.length == UI.ARENA_SIZE * UI.ARENA_SIZE);
 
         for (int i = 0; i < nullCompCount; i++) {
-            int gridIndex = (xNullComponents[i] * 13 + yNullComponents[i]);
+            int gridIndex = (xNullComponents[i] * UI.ARENA_SIZE + yNullComponents[i]);
             grid[gridIndex].sqrState = 'n';
         }
 
         for (int i = 0; i < playerCompCount; i++) {
-            int gridIndex = (xPlayerComponents[i] * 13 + yPlayerComponents[i]);
+            int gridIndex = (xPlayerComponents[i] * UI.ARENA_SIZE + yPlayerComponents[i]);
             grid[gridIndex].sqrState = 'p';
         }
     }
@@ -65,7 +65,7 @@ public class GridSquare {
         sqr.setBounds(GRID_X_GAP + x * UI.GRID_SQUARE_DISTANCE, GRID_Y_GAP + y * UI.GRID_SQUARE_DISTANCE, UI.GRID_SQUARE_DISTANCE, UI.GRID_SQUARE_DISTANCE);
         sqr.setBackground(COLOR_TRANSPARENT);
         sqr.setOpaque(true);
-        // if (sqrState == 'p') sqr.setBackground(COLOR_RED_DARK); // hehe remove but this is cool
+        // if (sqrState == 'p') sqr.setBackground(COLOR_RED_DARK); // hehe remove but this is cool todo
         return sqr;
     }
 
