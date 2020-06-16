@@ -15,7 +15,10 @@ public class Main {
     }
 
     public void gameInit() {
-        System.out.println("♥ ♥ ♥ Setting Up Dictionaries ♥ ♥ ♥");
+        System.out.println("♥ ♥ ♥ Setting Up Framework Dictionaries ♥ ♥ ♥");
+        ProcessTxt.initDictionary(ProcessTxt.WEAPON_TYPES_DICT_LOCATION, "\\w+,\\d+\\.\\d+");
+
+        System.out.println("♥ ♥ ♥ Setting Up Gameplay Dictionaries ♥ ♥ ♥");
         ProcessTxt.initDictionary(ProcessTxt.ABILITIES_DICT_LOCATION, "\\w+(\\s-)?(\\s+\\w+)*((,\\w+(-\\d+)?,\\d+){2}){2}");
         ProcessTxt.initDictionary(ProcessTxt.CHAR_INFO_DICT_LOCATION, "\\w+(\\s\\w+)*,\\w+,\\w+(,\\w+(\\s-)?(\\s\\w+)*){7}(,\\d+){4},\\w+(\\s\\w+)*");
         ProcessTxt.initDictionary(ProcessTxt.COABS_DICT_LOCATION, "\\w+(\\s-)?(\\s\\w+)*,\\w+(-\\d+(\\.\\d+)?)*,\\d+(\\.\\d+)?,(true|false)");

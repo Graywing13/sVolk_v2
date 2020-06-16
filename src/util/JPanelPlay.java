@@ -1,4 +1,5 @@
 // todo modify this such that if there's only one player and they press the arrow keys, it points to the same thing and does the same thing as wasd.
+// todo oh also overlay layout might be cool?
 
 package util;
 
@@ -19,11 +20,13 @@ public class JPanelPlay extends JPanel implements KeyListener {
     private Char p1Control;
     private Char p2Control;
     public GridSquare[] grid;
+    public Enemy volk;
 
-    public JPanelPlay(Char[] teamChars, GridSquare[] grid) {
+    public JPanelPlay(Char[] teamChars, GridSquare[] grid, Enemy volk) {
         addKeyListener(this);
         this.teamChars = teamChars;
         this.grid = grid;
+        this.volk = volk;
     }
 
     @Override
@@ -46,7 +49,7 @@ public class JPanelPlay extends JPanel implements KeyListener {
                     System.out.println("Pressed ALT + " + code);//todo remove
                 } else if (!e.isShiftDown() && REGULAR_CODES_SHIFT.contains(code)){
                     System.out.println("(P1) Pressed " + code);//todo remove
-                    p1Control.moveChar(code, false);
+                    p1Control.charEvent(code, false);
                 }
             }
             if (e.isShiftDown()) {
@@ -54,15 +57,15 @@ public class JPanelPlay extends JPanel implements KeyListener {
                     System.out.println("Pressed SHIFT + " + code);//todo remove
                 } else if (!e.isAltDown() && REGULAR_CODES_ALT.contains(code)){
                     System.out.println("(P2) Pressed " + code);//todo remove
-                    p2Control.moveChar(code, false);
+                    p2Control.charEvent(code, false);
                 }
             }
         } else if (REGULAR_CODES_SHIFT.contains(code)) {
             System.out.println("(P1) Pressed " + code);//todo remove
-            p1Control.moveChar(code, false);
+            p1Control.charEvent(code, false);
         } else if (REGULAR_CODES_ALT.contains(code)) {
             System.out.println("(P2) Pressed " + code);//todo remove
-            p2Control.moveChar(code, false);
+            p2Control.charEvent(code, false);
         }
     }
 
@@ -75,5 +78,9 @@ public class JPanelPlay extends JPanel implements KeyListener {
         } else {
             p2Control = c;
         }
+    }
+
+    public Enemy getEnemy() {
+        return volk;
     }
 }

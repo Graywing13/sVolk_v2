@@ -49,6 +49,8 @@ public class Char {
     private int locationY;
     private int volkX;
     private int volkY;
+    private boolean canHitVolk;
+    private Enemy volk;
 
     // The Defaults ====================================================================================================
     public Char(String name, String elem, String wT, String s1N, String s2N, String a1, String a2, String a3, String cc, String ct, int mt, int hp, int str, int def, Weapon w) {
@@ -115,6 +117,7 @@ public class Char {
     public JLabel setCharMarker(int x, int y, JPanelPlay jpp) {
         if (inControl) {
             this.jpp = jpp;
+            this.volk = jpp.getEnemy();
             if (p1Char) {
                 charMarker = new RotateLabel("./" + UI.P1_BIG_MARKER_LOCATION, UI.CHAR_DIRXN_INIT);
             } else {
@@ -135,24 +138,25 @@ public class Char {
     private JLabel placeChar(int x, int y) {
         locationX = x;
         locationY = y;
+        canHitVolk = w.canHitEnemy(x, y, volk);
         charMarker.setBounds((UI.GRID_X + x * UI.GRID_SQUARE_DISTANCE), (UI.GRID_Y + y * UI.GRID_SQUARE_DISTANCE), UI.GRID_SQUARE_SIDE_LENGTH, UI.GRID_SQUARE_SIDE_LENGTH);
         return charMarker;
     }
 
     // Character Movement ==============================================================================================
     // processes information from arrow keys and places the character at the new location
-    public void moveChar(int key, boolean modifier) {
-        volkX = UI.sVolk.getLocationX();
-        volkY = UI.sVolk.getLocationY();
+    public void charEvent(int key, boolean modifier) {
+        volkX = volk.getLocationX();
+        volkY = volk.getLocationY();
         if (!modifier) {
-            moveCharRegular(key);
+            charEventRegular(key);
         } else {
-            moveCharModifier(key);
+            charEventModifier(key);
         }
     }
 
     // does a regular char movement; see more in JPanelPlay
-    private void moveCharRegular(int key) {
+    private void charEventRegular(int key) {
         if (MOVE_DOWN.contains(key)) {
             move(0, 1);
         } else if (MOVE_UP.contains(key)) {
@@ -175,7 +179,7 @@ public class Char {
     }
 
     // does a modified char movement; see more in JPanelPlay
-    private void moveCharModifier(int key) {
+    private void charEventModifier(int key) {
         if (KEY_1.contains(key)) {
             System.out.println("Shifting into p1"); // todo add guard later on to make sure p1 exists etc.
         } else if (KEY_2.contains(key)) {
@@ -205,34 +209,17 @@ public class Char {
                 placeChar(locationX + moveX, locationY + moveY);
             }
         }
+        if (canHitVolk) {
+            System.out.println("Volk is close enough to hit!");
+            setAngle(moveX, moveY);
+        } else {
+            setAngle(moveX, moveY);
+        }
+    }
+
+    private void setAngle(int moveX, int moveY) {
+
         this.charMarker.changeAngle(Math.PI / 2 * (moveX * moveX * (2 - moveX) + moveY * (1 + moveY)));
-    }
-
-    private void moveDown() {
-        if (locationX == volkX && locationY == volkY - 1) {
-            placeChar(locationX, locationY + 2);
-        } else {
-            placeChar(locationX, locationY + 1);
-        }
-        this.charMarker.changeAngle(Math.PI);
-    }
-
-    private void moveRight() {
-        if (locationY == volkY && locationX == volkX - 1) {
-            placeChar(locationX + 2, locationY);
-        } else {
-            placeChar(locationX + 1, locationY);
-        }
-        this.charMarker.changeAngle(Math.PI / 2);
-    }
-
-    private void moveLeft() {
-        if (locationY == volkY && locationX == volkX + 1) {
-            placeChar(locationX - 2, locationY);
-        } else {
-            placeChar(locationX - 1, locationY);
-        }
-        this.charMarker.changeAngle(3 * Math.PI / 2);
     }
 
     private void attack() {

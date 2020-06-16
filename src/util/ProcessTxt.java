@@ -1,3 +1,6 @@
+// Notes:
+//   - consider moving some of these dictionaries to their respective classes
+
 package util;
 
 import java.io.File;
@@ -10,18 +13,21 @@ public class ProcessTxt {
     public final static List<String> ELEMENTS = Arrays.asList("Flame", "Light", "None", "Shadow", "Water", "Wind");
 
     // Dictionary Constants
-    public final static String ABILITIES_DICT_LOCATION = "./data/dict/abilities.txt";
+    private final static String DICT_LOCATION = "./data/dict/";
+    public final static String ABILITIES_DICT_LOCATION = DICT_LOCATION + "abilities.txt";
     public static final HashMap<String, Ability> ABILITIES_DICTIONARY = new HashMap<>();
-    public final static String CHAR_INFO_DICT_LOCATION = "./data/dict/char_info.txt";
+    public final static String CHAR_INFO_DICT_LOCATION = DICT_LOCATION + "char_info.txt";
     public static final HashMap<String, Char> CHAR_INFO_DICTIONARY = new HashMap<>();
-    public final static String COABS_DICT_LOCATION = "./data/dict/coabs.txt";
+    public final static String COABS_DICT_LOCATION = DICT_LOCATION + "coabs.txt";
     public static final HashMap<String, Coab> COABS_DICTIONARY = new HashMap<>();
-    //public final static String PRINTS_DICT_LOCATION = "./data/dict/prints.txt";
+    //public final static String PRINTS_DICT_LOCATION = DICT_LOCATION + "prints.txt";
     //public static final HashMap<String, Print> PRINTS_DICTIONARY = new HashMap<>();
-    public final static String SKILLS_DICT_LOCATION = "./data/dict/skills.txt";
+    public final static String SKILLS_DICT_LOCATION = DICT_LOCATION + "skills.txt";
     public static final HashMap<String, Skill> SKILLS_DICTIONARY = new HashMap<>();
-    public final static String WEAPONS_DICT_LOCATION = "./data/dict/weapons.txt";
+    public final static String WEAPONS_DICT_LOCATION = DICT_LOCATION + "weapons.txt";
     public static final HashMap<String, Weapon> WEAPONS_DICTIONARY = new HashMap<>();
+    public static final String WEAPON_TYPES_DICT_LOCATION = DICT_LOCATION + "weapontypes.txt";
+    public static final HashMap<String, WeaponType> WEAPON_TYPES_DICTIONARY = new HashMap<>();
 
     // ♦ ♦ ♦ Dictionary Creation (Main)
     public static void initDictionary(String fileLocation, String regexMatch) {
@@ -54,6 +60,10 @@ public class ProcessTxt {
                     case WEAPONS_DICT_LOCATION:
                         if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
                         addLineToWeaponDict(fileLocation, string);
+                        break;
+                    case WEAPON_TYPES_DICT_LOCATION:
+                        if (!string.matches(regexMatch)) throw new RuntimeException("Invalid string: " + string);
+                        addLineToWeaponTypeDict(fileLocation, string);
                         break;
                     default:
                         throw new RuntimeException("Unrecognized dictionary location " + fileLocation);
@@ -167,6 +177,9 @@ public class ProcessTxt {
     }
 
     private static void addLineToWeaponDict(String fileLocation, String entry) {
+
+        assert(!WEAPON_TYPES_DICTIONARY.isEmpty());
+
         // String wN, elem, wT;
         // int mtE, mtOE, hp, str;
         String aN;
@@ -194,6 +207,24 @@ public class ProcessTxt {
         }
     }
 
+    private static void addLineToWeaponTypeDict(String fileLocation, String entry) {
+        String wT;
+        double wR;
+
+        Scanner parseLine = new Scanner(entry).useDelimiter(",");
+        try {
+            wT = parseLine.next();
+            wR = parseLine.nextDouble();
+
+            noDuplicates(WEAPON_TYPES_DICTIONARY, wT, entry, fileLocation);
+
+            WEAPON_TYPES_DICTIONARY.put(wT, new WeaponType(wT, wR));
+            parseLine.close();
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid string: " + entry);
+        }
+    }
+
     // ♦ ♦ ♦ Small Helper Functions
     public static String stringSplit(String toSplit, String delimiter, int location) {
         // NOTE: location of 0 means "take string BEFORE the delimiter", 1 means AFTER. All other positive ints are etc.
@@ -205,7 +236,7 @@ public class ProcessTxt {
     }
 
     private static void validWeaponType(String wT) {
-        if (!Weapon.WEAPON_TYPES.contains(wT)) throw new RuntimeException("The weapon type " + wT + " is invalid.");
+        if (!WEAPON_TYPES_DICTIONARY.containsKey(wT)) throw new RuntimeException("The weapon type " + wT + " is invalid.");
     }
 
     private static void noDuplicates(HashMap<String, ?> dictionary, String key, String entry, String fileLocation) {

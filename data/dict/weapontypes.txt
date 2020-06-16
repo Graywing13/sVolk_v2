@@ -1,0 +1,21 @@
+// weapontypes! data from gamepedia and gamepress.
+// ---------------------------------------------------------------------------------------------------------------------
+// Notes:
+//   - need to add combos later.
+//   - the weapon range values are 1 less than that weapon's most prevelant range listed in https://dragalialost.gamepedia.com/Combat_Mechanics
+// ---------------------------------------------------------------------------------------------------------------------
+// Format:
+// (1) String  weaponType                << One of "Axe", "Blade", "Bow", "Dagger", "Lance", "Staff", "Sword", "Wand"
+// (2) double  weaponRange
+//
+// \\w+,\\d+\\.\\d+
+// ---------------------------------------------------------------------------------------------------------------------
+// ♥ ♥ ♥ WEAPONS TYPES ♥ ♥ ♥
+Axe,1.5
+Blade,1.0
+Bow,4.5
+Dagger,1.5
+Lance,2.0
+Staff,5.0
+Sword,1.0
+Wand,5.5

@@ -6,14 +6,13 @@ import javax.swing.*;
 
 public class Enemy {
 
-    JPanelPlay jpp;
     JLabel volkMarker;
 
     private int locationX;
     private int locationY;
 
-    public Enemy(JPanelPlay jpp) {
-        this.jpp = jpp;
+    public Enemy() {
+
     }
 
     // initializes Volk's marker, calls placeVolk for placement.

@@ -77,7 +77,7 @@ public class UI {
     public JPanelPlay JPP;
     private JFrame fChooseTeam;
     private JFrame fGamePlay;
-    public static Enemy sVolk; // todo see if i can make this nonstatic
+    public Enemy sVolk = new Enemy();
 
     // VARIABLES FOR THE TEAM
     private Char[] teamChars;
@@ -426,11 +426,10 @@ public class UI {
 
     // starts the game up. // todo rename all these to more logical things and maybe draw a map who knows
     private void GPInitGame() throws IOException {
-        JPP = new JPanelPlay(teamChars, grid_13x13);
+        JPP = new JPanelPlay(teamChars, grid_13x13, sVolk);
         fGamePlay.add(JPP);
         fGamePlay.setVisible(true);
         determineMarkerTypes();
-        sVolk = new Enemy(JPP);
         placePlayers();
 
         fGamePlay.add(sVolk.setVolkMarker(6, 6));
