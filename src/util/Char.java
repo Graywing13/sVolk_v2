@@ -218,7 +218,7 @@ public class Char {
                     volk.addOverlay(UI.P2_FOCUS);
                 }
             }
-            setAngle(moveX, moveY);
+            setAngleCanHit();
         } else {
             if (inControl) {
                 if (p1Char) {
@@ -227,12 +227,37 @@ public class Char {
                     volk.removeOverlay(UI.P2_FOCUS);
                 }
             }
-            setAngle(moveX, moveY);
+            setAngleCannotHit(moveX, moveY);
         }
     }
 
-    private void setAngle(int moveX, int moveY) {
+    private void setAngleCanHit() {
+        int deltaX = volkX - locationX;
+        int deltaY = locationY - volkY;
+        if (deltaX == 0) {
+            if (deltaY > 0) {
+                this.charMarker.changeAngle(0);
+            } else {
+                this.charMarker.changeAngle(Math.PI);
+            }
+        } else if (deltaY == 0) {
+            if (deltaX > 0) {
+                this.charMarker.changeAngle(Math.PI / 2);
+            } else {
+                this.charMarker.changeAngle(Math.PI * 3 / 2);
+            }
+        } else {
+            if (deltaY < 0) {
+                System.out.println("option 1");
+                this.charMarker.changeAngle(Math.atan((double) deltaX / (double) deltaY) + Math.PI);
+            } else {
+                System.out.println("option 2");
+                this.charMarker.changeAngle(Math.atan((double) deltaX / (double) deltaY));
+            }
+        }
+    }
 
+    private void setAngleCannotHit(int moveX, int moveY) {
         this.charMarker.changeAngle(Math.PI / 2 * (moveX * moveX * (2 - moveX) + moveY * (1 + moveY)));
     }
 

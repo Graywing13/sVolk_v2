@@ -58,7 +58,7 @@ public class Enemy {
     public void removeOverlay(RotateLabel rl) {
         rl.setVisible(false);
         markerOverlays.remove(rl);
-        System.out.println(rl + " Overlay removed");
+        markerOverlays.remove(rl);
     }
 
     private void checkDistFromPlayers() {
