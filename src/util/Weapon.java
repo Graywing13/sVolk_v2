@@ -34,8 +34,8 @@ public class Weapon implements Cloneable{
 
     // checks a weapon's range and distance and returns whether volk can be hit from the char's location
     public boolean canHitEnemy(int charX, int charY, Enemy enemy) {
-        int xDistToVolk = charX - enemy.getLocationX();
-        int yDistToVolk = charY - enemy.getLocationY();
+        int xDistToVolk = charX - enemy.getVolkX();
+        int yDistToVolk = charY - enemy.getVolkY();
         double wepRange = wT.getwR();
         return (wepRange * wepRange > (xDistToVolk * xDistToVolk + yDistToVolk * yDistToVolk));
     }

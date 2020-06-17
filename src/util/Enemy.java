@@ -3,16 +3,23 @@ package util;
 import ui.UI;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Enemy {
 
     JLabel volkMarker;
+    private int pixelX;
+    private int pixelY;
 
-    private int locationX;
-    private int locationY;
+    private ArrayList<RotateLabel> markerOverlays = new ArrayList<RotateLabel>(){};
 
-    public Enemy() {
+    private int volkX;
+    private int volkY;
 
+    private UI ui;
+
+    public Enemy(UI ui) {
+        this.ui = ui;
     }
 
     // initializes Volk's marker, calls placeVolk for placement.
@@ -23,19 +30,47 @@ public class Enemy {
     }
 
     // puts the character at the specified spot
-    private JLabel placeVolk(int x, int y) {
-        locationX = x;
-        locationY = y;
-        volkMarker.setBounds((UI.GRID_X + x * UI.GRID_SQUARE_DISTANCE), (UI.GRID_Y + y * UI.GRID_SQUARE_DISTANCE), UI.GRID_SQUARE_SIDE_LENGTH, UI.GRID_SQUARE_SIDE_LENGTH);
-        return volkMarker;
+    private void placeVolk(int x, int y) {
+        volkX = x;
+        volkY = y;
+        pixelX = UI.GRID_X + x * UI.GRID_SQUARE_DISTANCE;
+        pixelY = UI.GRID_Y + y * UI.GRID_SQUARE_DISTANCE;
+        checkDistFromPlayers();
+        overlayVolkMarkers();
+        volkMarker.setBounds(pixelX, pixelY, UI.GRID_SQUARE_SIDE_LENGTH, UI.GRID_SQUARE_SIDE_LENGTH);
+    }
+
+    // puts other images on top of the volk marker
+    public void overlayVolkMarkers() {
+        for (RotateLabel targetImg : markerOverlays) {
+            targetImg.setBounds(pixelX - 2, pixelY - 2, UI.GRID_SQUARE_DISTANCE, UI.GRID_SQUARE_DISTANCE);
+        }
+    }
+
+    public void addOverlay(RotateLabel rl) {
+        if (!markerOverlays.contains(rl)) {
+            markerOverlays.add(rl);
+            overlayVolkMarkers();
+            rl.setVisible(true);
+        }
+    }
+
+    public void removeOverlay(RotateLabel rl) {
+        rl.setVisible(false);
+        markerOverlays.remove(rl);
+        System.out.println(rl + " Overlay removed");
+    }
+
+    private void checkDistFromPlayers() {
+        // todo make sure that after volk moves, the character is still in range.
     }
 
     // Return Values ===================================================================================================
-    public int getLocationX() {
-        return locationX;
+    public int getVolkX() {
+        return volkX;
     }
 
-    public int getLocationY() {
-        return locationY;
+    public int getVolkY() {
+        return volkY;
     }
 }

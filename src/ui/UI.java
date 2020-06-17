@@ -3,6 +3,9 @@
 // TODO consider removing team
 // TODO add the coloured circle to FireLogo.png
 
+// Notes:
+//   - P1_FOCUS and P2_FOCUS have to be 23x23; see Enemy.java, overlayVolkMarkers(), for details.
+
 package ui;
 
 import util.*;
@@ -63,6 +66,8 @@ public class UI {
     public static final String P2_BIG_MARKER_LOCATION = IMG_LOCATION + "P2Big.png";
     public static final String P2_SMALL_MARKER_LOCATION = IMG_LOCATION + "P2Small.png";
     public static final String VOLK_MARKER_LOCATION = IMG_LOCATION + "VolkMarker.png";
+    public static final RotateLabel P1_FOCUS = new RotateLabel(IMG_LOCATION + "P1Focus.png", 0);
+    public static final RotateLabel P2_FOCUS = new RotateLabel(IMG_LOCATION + "P2Focus.png", 0);
     private static final ImageIcon FIRE_ICON = new ImageIcon(IMG_LOCATION + "FireLogo.png");
     public static final double CHAR_DIRXN_INIT = Math.PI / 4;
     public static final double VOLK_DIRXN_INIT = 5 * Math.PI / 4;
@@ -77,7 +82,7 @@ public class UI {
     public JPanelPlay JPP;
     private JFrame fChooseTeam;
     private JFrame fGamePlay;
-    public Enemy sVolk = new Enemy();
+    public Enemy sVolk = new Enemy(this);
 
     // VARIABLES FOR THE TEAM
     private Char[] teamChars;
@@ -433,6 +438,8 @@ public class UI {
         placePlayers();
 
         fGamePlay.add(sVolk.setVolkMarker(6, 6));
+        fGamePlay.add(P1_FOCUS);
+        fGamePlay.add(P2_FOCUS);
         fGamePlay.repaint();
         //play(); // todo
 
@@ -448,7 +455,7 @@ public class UI {
          */
     }
 
-    private void placePlayers() throws IOException { // todo add the other characters.
+    private void placePlayers() { // todo add the other characters.
         // initiate and place player markers at coordinate x, y
         fGamePlay.add(teamChars[0].setCharMarker(4, 8, JPP));
         fGamePlay.add(teamChars[1].setCharMarker(2, 8, JPP));
@@ -457,6 +464,14 @@ public class UI {
     private void determineMarkerTypes() { // todo add to this + modify it to depend on user input...
         teamChars[0].setMarker(true, true);
         teamChars[1].setMarker(false, true);
+    }
+
+    public void repaintJPP() {
+        fGamePlay.repaint();
+    }
+
+    public void addRLtoJPP(RotateLabel rl) {
+        fGamePlay.add(rl);
     }
 
 }

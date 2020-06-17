@@ -146,8 +146,8 @@ public class Char {
     // Character Movement ==============================================================================================
     // processes information from arrow keys and places the character at the new location
     public void charEvent(int key, boolean modifier) {
-        volkX = volk.getLocationX();
-        volkY = volk.getLocationY();
+        volkX = volk.getVolkX();
+        volkY = volk.getVolkY();
         if (!modifier) {
             charEventRegular(key);
         } else {
@@ -211,8 +211,22 @@ public class Char {
         }
         if (canHitVolk) {
             System.out.println("Volk is close enough to hit!");
+            if (inControl) {
+                if (p1Char) {
+                    volk.addOverlay(UI.P1_FOCUS);
+                } else {
+                    volk.addOverlay(UI.P2_FOCUS);
+                }
+            }
             setAngle(moveX, moveY);
         } else {
+            if (inControl) {
+                if (p1Char) {
+                    volk.removeOverlay(UI.P1_FOCUS);
+                } else {
+                    volk.removeOverlay(UI.P2_FOCUS);
+                }
+            }
             setAngle(moveX, moveY);
         }
     }
