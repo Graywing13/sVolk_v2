@@ -28,18 +28,38 @@ public class RotateIcon implements Icon {
 
         int tMX; // translate modifier for x
         int tMY; // translate modifier for y
-        if (radians < 0.1 && radians > -0.1){
+        // positive tMX, tMY moves the marker to the lower right hand corner
+        if (radians >= Math.PI * 9/8) {
+            radians -= Math.PI * 2;
+        }
+        System.out.println(radians); // todo remove
+        if (-0.1 < radians && radians <= 0.1){
             tMX = 0;
             tMY = 1;
-        } else if (radians < Math.PI) {
+        } else if (radians == - Math.PI / 2) {
             tMX = 0;
+            tMY = 1;
+        } else if (- Math.PI < radians && radians <= - Math.PI * 2/3) {
+            tMX = -4;
+            tMY = 2;
+        } else if (- Math.PI / 2 < radians && radians <= - Math.PI / 4) {
+            tMX = -3;
+            tMY = 0;
+        } else if (0.1 < radians && radians < Math.PI / 2) {
+            tMX = -1;
             tMY = -1;
-        } else if (radians == Math.PI){
-            tMX = 1;
+        } else if (Math.PI / 2 < radians && radians <= Math.PI * 2/3) {
+            tMX = -1;
+            tMY = 0;
+        } else if (Math.PI * 2/3 < radians && radians <= Math.PI * 7/8) {
+            tMX = -1;
+            tMY = 1;
+        } else if (Math.PI * 7/8 < radians && radians <= Math.PI * 9/8) { // between -2.78 and -pi OR between 2.78 and pi
+            tMX = 0;
             tMY = 0;
         } else {
-            tMX = -2;
-            tMY = 1;
+            tMX = -4;
+            tMY = 0;
         }
 
         g2.setClip(x, y, getIconWidth(), getIconHeight());

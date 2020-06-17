@@ -248,10 +248,8 @@ public class Char {
             }
         } else {
             if (deltaY < 0) {
-                System.out.println("option 1");
                 this.charMarker.changeAngle(Math.atan((double) deltaX / (double) deltaY) + Math.PI);
             } else {
-                System.out.println("option 2");
                 this.charMarker.changeAngle(Math.atan((double) deltaX / (double) deltaY));
             }
         }
