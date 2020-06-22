@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class Char {
 
     // used for checking location relative to map
@@ -151,6 +153,7 @@ public class Char {
         if (!modifier) {
             charEventRegular(key);
         } else {
+            System.out.println("charEvent in Char - modifier \n");
             charEventModifier(key);
         }
     }
@@ -182,6 +185,7 @@ public class Char {
     private void charEventModifier(int key) {
         if (KEY_1.contains(key)) {
             System.out.println("Shifting into p1"); // todo add guard later on to make sure p1 exists etc.
+            // todo add the shifting function. also add a orange/blue ring around the pfp to know who's controlling what
         } else if (KEY_2.contains(key)) {
             System.out.println("Shifting into p2");
         } else if (KEY_3.contains(key)) {
@@ -193,7 +197,7 @@ public class Char {
         }
     }
 
-    // moves a player 1 square in the 4 cardinal directions.
+    // move(moveX, moveY); moves a player 1 square in the 4 cardinal directions.
     /*
      * variables:
      *    - moveX: the x-distance that the desired move moves the character (-1 is left, 1 is right)
@@ -210,7 +214,6 @@ public class Char {
             }
         }
         if (canHitVolk) {
-            System.out.println("Volk is close enough to hit!");
             if (inControl) {
                 if (p1Char) {
                     volk.addOverlay(UI.P1_FOCUS);
@@ -231,6 +234,8 @@ public class Char {
         }
     }
 
+    // changes the direction the char's marker is facing when said char can hit Volk.
+    // MODIFIES: this.char (more specifically the marker)
     private void setAngleCanHit() {
         int deltaX = volkX - locationX;
         int deltaY = locationY - volkY;
@@ -255,12 +260,19 @@ public class Char {
         }
     }
 
+    // changes the direction the char's marker is facing when said char cannot hit Volk.
+    // MODIFIES: this.char (more specifically the marker)
     private void setAngleCannotHit(int moveX, int moveY) {
         this.charMarker.changeAngle(Math.PI / 2 * (moveX * moveX * (2 - moveX) + moveY * (1 + moveY)));
     }
 
+    // todo add cool swipes and stuff
     private void attack() {
-        System.out.format("Attacking Volk @%d, %d from %d, %d%n", volkX, volkY, locationX, locationY); // todo edit
+        if (canHitVolk) {
+            System.out.format("Attacking Volk @%d, %d from %d, %d%n", volkX, volkY, locationX, locationY); // todo edit
+            System.out.println("(Char) Value obtained by attack() from damage formula is " + damageFormula(volk));
+            volk.takeDamage(damageFormula(volk));
+        }
     }
 
     // Get variable values =============================================================================================
@@ -308,6 +320,86 @@ public class Char {
         return this.mt;
     }
 
+
+    // Real Gameplay ===================================================================================================
+    public int damageFormula(Enemy enemy) {
+        //return (int) Math.floor((5.0/3.0) * (0.01 * (100 - enemy.getDamageRes()) * calcTotalStr() * calcAtkMod() * calcCritMod() * calcSpecialDmg() * calcPunishMod() * calcElemMod(enemy) * calcDragonDmg() * calcDmgSpread()) / (enemy.getDef() * enemy.calcDefChange()));
+        return 10; // todo uncomment
+    }
+
+
+    // Calculations ====================================================================================================
+    public static int calculateNewMt(@NotNull String name, @NotNull Weapon w) {
+        Char targetChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(name);
+        int might = targetChar.mt;
+
+        if (w.elem.equals(targetChar.elem)) might += w.mtE;
+        else might += w.mtOE;
+
+        return might;
+    }
+
+    private double calcAtkMod() {
+        return 0; // todo
+    }
+
+    private double calcTotalStr() {
+        return 0; // todo
+    }
+
+    private double calcDmgSpread() {
+        double temp = 0.01 * ThreadLocalRandom.current().nextInt(95, 106); // note: nextInt range is [min, max)
+        System.out.println("====== (Char) calc damage spread | " + temp); // todo remove
+        return temp;
+    }
+
+    private double calcDragonDmg() {
+        return 0; // todo
+    }
+
+    private double calcElemMod(Enemy enemy) {
+        String enemyElem = enemy.getElem();
+        int fwwIndexChar = ProcessTxt.FWW_ELEM_CYCLE.indexOf(elem);
+        System.out.format("========= %n(Char) calc elem mod | Char: %s; Enemy: %s %n", elem, enemyElem); // todo remove
+        if (!(fwwIndexChar == -1)) {
+            int fwwIndexEnemy = ProcessTxt.FWW_ELEM_CYCLE.indexOf(enemyElem);
+            if (fwwIndexEnemy == -1) return 1.0;
+            switch (fwwIndexEnemy - fwwIndexChar) {
+                case 1:
+                case -2:
+                    System.out.println("(Char) 1.5");
+                    return 1.5;
+                case 2:
+                case -1:
+                    System.out.println("(Char) 0.5");
+                    return 0.5;
+                default:
+                    System.out.println("(Char) 1.0");
+                    return 1.0;
+            }
+        } else if (ProcessTxt.LS_ELEM_CYCLE.indexOf(elem) + ProcessTxt.LS_ELEM_CYCLE.indexOf(enemyElem) == 1) {
+            System.out.println("(Char) 1.5");
+            return 1.5;
+        } else {
+            System.out.println("(Char) 1.0");
+            return 1.0;
+        }
+    }
+
+    private double calcPunishMod() {
+        return 0; // todo
+    }
+
+    // note: this is generalized from "Skill Damage or Force Damage", which is what gamepedia calls it
+    private double calcSpecialDmg() {
+        return 0; // todo
+    }
+
+    private double calcCritMod() {
+        return 0; // todo
+    }
+
+
     // Other helper functions ==========================================================================================
     public void printAbilities(@NotNull Ability ability) {
         System.out.println(name + "'s ability is " + ability.toString());
@@ -322,17 +414,7 @@ public class Char {
     }
 
     public static void setNewMt(@NotNull Char c) {
-        c.mt = getNewMt(c.name, c.w);
-    }
-
-    public static int getNewMt(@NotNull String name, @NotNull Weapon w) {
-        Char targetChar = ProcessTxt.CHAR_INFO_DICTIONARY.get(name);
-        int might = targetChar.mt;
-
-        if (w.elem.equals(targetChar.elem)) might += w.mtE;
-        else might += w.mtOE;
-
-        return might;
+        c.mt = calculateNewMt(c.name, c.w);
     }
 
     public void setWeapon(String wepName) {

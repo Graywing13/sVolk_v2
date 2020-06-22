@@ -40,14 +40,14 @@ public class UI {
     private static final int CT_NEXT_Y = FRAME_HEIGHT - (CT_FIELD_HEIGHT + 128);
 
     // GAMEPLAY
-    private static final int ICON_Y_INCREMENT = 52;
-    private static final int ELEM_ICON_X = 469;
-    private static final int ELEM_ICON_Y = 37;
-    private static final int ELEM_ICON_SIZE = 20;
+    private static final int ICON_Y_INCREMENT = 60;
+    private static final int ELEM_ICON_X = 468;
+    private static final int ELEM_ICON_Y = 60;
+    private static final int ELEM_ICON_SIZE = 25;
     private static final int CHAR_MIDDLE_PIC_X = 479;
-    private static final int CHAR_MIDDLE_PIC_Y = 12;
+    private static final int CHAR_MIDDLE_PIC_Y = 32;
     private static final int CHAR_MIDDLE_PIC_SIZE = 36;
-    private static final int CHAR_SIDE_PIC_INCREMENT = 92;
+    private static final int CHAR_SIDE_PIC_INCREMENT = 97;
     private static final int CHAR_SIDE_PIC_X = 36;
     private static final int CHAR_SIDE_PIC_Y = 63;
     private static final int CHAR_SIDE_PIC_SIZE = 64;
@@ -59,7 +59,7 @@ public class UI {
 
     private static final Color DEFAULT_BKG = new Color(0, 0, 0);
     private static final String IMG_LOCATION = "././data/img/";
-    private static final String GAMEPLAY_BKG_LOCATION = IMG_LOCATION + "gameplayBKGv4.png";
+    private static final String GAMEPLAY_BKG_LOCATION = IMG_LOCATION + "gameplayBKGv5.png";
     private static final ImageIcon SVOLK_LOGO_ICON = new ImageIcon(IMG_LOCATION + "sVolkLogo.png");
     public static final String P1_BIG_MARKER_LOCATION = IMG_LOCATION + "P1Big.png";
     public static final String P1_SMALL_MARKER_LOCATION = IMG_LOCATION + "P1Small.png";
@@ -151,11 +151,7 @@ public class UI {
         nextB.setBounds(CT_NEXT_X, CT_NEXT_Y, CT_NEXT_WIDTH, CT_FIELD_HEIGHT);
         nextB.addActionListener(e -> {
             makeTeam();
-            try {
-                setupSVolk();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            setupSVolk();
             fChooseTeam.setVisible(false);
         });
 
@@ -299,7 +295,7 @@ public class UI {
     private void updateMt(int playerNum) throws RuntimeException {
         int index = playerNum - 1;
         Weapon targetWeapon = ProcessTxt.WEAPONS_DICTIONARY.get(weaponNames[index]);
-        int mt = Char.getNewMt(teamNames[index], targetWeapon);
+        int mt = Char.calculateNewMt(teamNames[index], targetWeapon);
         switch (playerNum) {
             case 1:
                 mt1.setText(String.valueOf(mt));
@@ -349,7 +345,7 @@ public class UI {
      * GAMEPLAY INITIALIZATION
      */
     // calls necessary initiation functions for sVolk Gameplay stage.
-    private void setupSVolk() throws IOException {
+    private void setupSVolk() {
         this.fGamePlay = new JFrame("sVOLK_v2");
         fGamePlay.setResizable(true);
         GPInitGraphics();
@@ -430,7 +426,7 @@ public class UI {
     }
 
     // starts the game up. // todo rename all these to more logical things and maybe draw a map who knows
-    private void GPInitGame() throws IOException {
+    private void GPInitGame() {
         JPP = new JPanelPlay(teamChars, grid_13x13, sVolk);
         fGamePlay.add(JPP);
         fGamePlay.setVisible(true);
@@ -441,17 +437,16 @@ public class UI {
         fGamePlay.add(P1_FOCUS);
         fGamePlay.add(P2_FOCUS);
         fGamePlay.repaint();
-        //play(); // todo
 
-        /**
-         * X) import marker images as imageicons
-         * X) check that enterkeys works via println
-         * X) when game starts, initiate the marker at (5, 9)
-         * X) when arrowkey pressed, move marker in the correct direction by CONSTANT pixels
-         * X) check that when arrowkey pressed, the person can actually move up or whatever
-         * X) plop a volk at (7, 7)
-         * X) when ya run into volk u move up two instead of 1
-         * 7) do damage to volk when "f" is pressed (not held) and volk is within WEP_DEP_CONSTANT squares. // todo
+        /*
+          X) import marker images as imageicons
+          X) check that enterkeys works via println
+          X) when game starts, initiate the marker at (5, 9)
+          X) when arrowkey pressed, move marker in the correct direction by CONSTANT pixels
+          X) check that when arrowkey pressed, the person can actually move up or whatever
+          X) plop a volk at (7, 7)
+          X) when ya run into volk u move up two instead of 1
+          7) do damage to volk when "f" is pressed (not held) and volk is within WEP_DEP_CONSTANT squares. // todo
          */
     }
 
@@ -466,12 +461,8 @@ public class UI {
         teamChars[1].setMarker(false, true);
     }
 
-    public void repaintJPP() {
-        fGamePlay.repaint();
-    }
-
-    public void addRLtoJPP(RotateLabel rl) {
-        fGamePlay.add(rl);
+    public void gameOver() {
+        System.out.println("gg no re"); // todo edit and tbh maybe we need the gamerunning variable as a STOP ALL button
     }
 
 }

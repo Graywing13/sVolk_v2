@@ -1,12 +1,41 @@
 // weapontypes! data from gamepedia and gamepress.
+// overdrive information not found in gamepedia's Combat Mechanics are from https://www.reddit.com/r/DragaliaLost/comments/f6tarn/weapon_combos_dps_overdrive_dps_and_spps/
 // ---------------------------------------------------------------------------------------------------------------------
 // Notes:
 //   - need to add combos later.
 //   - the weapon range values are 1 less than that weapon's most prevelant range listed in https://dragalialost.gamepedia.com/Combat_Mechanics
 // ---------------------------------------------------------------------------------------------------------------------
 // Format:
-// (1) String  weaponType                << One of "Axe", "Blade", "Bow", "Dagger", "Lance", "Staff", "Sword", "Wand"
-// (2) double  weaponRange
+// (1)  String  weaponType                << One of "Axe", "Blade", "Bow", "Dagger", "Lance", "Staff", "Sword", "Wand"
+// (2)  double  weaponRange
+// (3)  double  combo1DamageMod           << Lvl 2 for all damage mods
+// (4)  int     combo1Hits
+// (5)  int     combo1SPgain
+// (6)  double  combo1Range
+// (7)  double  c2DM
+// (8)  int     c2H
+// (9)  int     c2SP
+// (10) double  c2R
+// (11) double  c3DM
+// (12) int     c3H
+// (13) int     c3SP
+// (14) double  c3R
+// (15) double  c4DM
+// (16) int     c4H
+// (17) int     c4SP
+// (18) double  c4R
+// (19) double  c5DM
+// (20) int     c5H
+// (21) int     c5SP
+// (22) double  c5R
+// (23) String  FSType                    << one of 'd', 'p', 't' (Directional, Personal AoE, Targeted AoE)
+// (24) int     FSDmgMultiplier
+// (25) int     FSHitcount
+// (26) int     FSSPgain                  << only counts for first hit
+// (27) double  FSRange
+// (28) int     ODbarDmgMult1             << Boss' overdrive bar damage effect
+// (29) int     ODDM1Count                << if FSH <= ODDM1C, then do FSDM * ODDM1 * Char.str damage. Else, replace ODDM1 with ODDM2.
+// (30) int     ODbarDmgMult2
 //
 // \\w+,\\d+\\.\\d+
 // ---------------------------------------------------------------------------------------------------------------------

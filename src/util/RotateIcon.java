@@ -32,13 +32,15 @@ public class RotateIcon implements Icon {
         if (radians >= Math.PI * 9/8) {
             radians -= Math.PI * 2;
         }
-        System.out.println(radians); // todo remove
         if (-0.1 < radians && radians <= 0.1){
             tMX = 0;
             tMY = 1;
         } else if (radians == - Math.PI / 2) {
             tMX = 0;
             tMY = 1;
+        } else if (radians == Math.PI / 2) {
+            tMX = 0;
+            tMY = 0;
         } else if (- Math.PI < radians && radians <= - Math.PI * 2/3) {
             tMX = -4;
             tMY = 2;
@@ -75,15 +77,13 @@ public class RotateIcon implements Icon {
     public int getIconWidth() {
         double sin = Math.abs( Math.sin( radians ) );
         double cos = Math.abs( Math.cos( radians ) );
-        int width = (int)Math.floor(icon.getIconWidth() * cos + icon.getIconHeight() * sin);
-        return width;
+        return (int)Math.floor(icon.getIconWidth() * cos + icon.getIconHeight() * sin);
     }
 
     @Override
     public int getIconHeight() {
         double sin = Math.abs( Math.sin( radians ) );
         double cos = Math.abs( Math.cos( radians ) );
-        int height = (int)Math.floor(icon.getIconHeight() * cos + icon.getIconWidth() * sin);
-        return height;
+        return (int)Math.floor(icon.getIconHeight() * cos + icon.getIconWidth() * sin);
     }
 }

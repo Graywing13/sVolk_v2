@@ -8,13 +8,17 @@ import java.util.ArrayList;
 public class Enemy {
 
     JLabel volkMarker;
+    private int volkX;
+    private int volkY;
     private int pixelX;
     private int pixelY;
 
+    private int hp = 100;
+
     private ArrayList<RotateLabel> markerOverlays = new ArrayList<RotateLabel>(){};
 
-    private int volkX;
-    private int volkY;
+    // constants
+    private String volkElem = "Wind";
 
     private UI ui;
 
@@ -65,6 +69,15 @@ public class Enemy {
         // todo make sure that after volk moves, the character is still in range.
     }
 
+    // todo if i add a swing timer, this should tick like twice per second
+    public void takeDamage(int dmg) {
+        hp -= dmg;
+        System.out.format("(Enemy) HP left: %d / 100%n", hp); // todo remove
+        if (hp <= 0) {
+            ui.gameOver();
+        }
+    }
+
     // Return Values ===================================================================================================
     public int getVolkX() {
         return volkX;
@@ -72,5 +85,21 @@ public class Enemy {
 
     public int getVolkY() {
         return volkY;
+    }
+
+    public int getDamageRes() {
+        return 0; // todo
+    }
+
+    public String getElem() {
+        return volkElem;
+    }
+
+    public double getDef() {
+        return 1; // todo
+    }
+
+    public double calcDefChange() {
+        return 1; // todo
     }
 }

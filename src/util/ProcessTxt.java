@@ -1,5 +1,6 @@
 // Notes:
 //   - consider moving some of these dictionaries to their respective classes
+//   - consider adding a Playable class from which Char and Enemy extend.
 
 package util;
 
@@ -10,7 +11,10 @@ import java.util.*;
 public class ProcessTxt {
 
     // General Constants
-    public final static List<String> ELEMENTS = Arrays.asList("Flame", "Light", "None", "Shadow", "Water", "Wind");
+    public final static List<String> ELEMENTS = Arrays.asList("Flame", "Light", "None", "Shadow", "Water", "Wind"); // note: none type is for unattuned weapons
+    public final static ArrayList<String> FWW_ELEM_CYCLE = new ArrayList<>(Arrays.asList("Flame", "Wind", "Water"));
+    public final static ArrayList<String> LS_ELEM_CYCLE = new ArrayList<>(Arrays.asList("Light", "Shadow"));
+
 
     // Dictionary Constants
     private final static String DICT_LOCATION = "./data/dict/";

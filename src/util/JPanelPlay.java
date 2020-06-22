@@ -47,6 +47,7 @@ public class JPanelPlay extends JPanel implements KeyListener {
             if (e.isAltDown()) {
                 if (MODIFIER_CODES_ALT.contains(code)) {
                     System.out.println("Pressed ALT + " + code);//todo remove
+                    p1Control.charEvent(code, true);
                 } else if (!e.isShiftDown() && REGULAR_CODES_SHIFT.contains(code)){
                     System.out.println("(P1) Pressed " + code);//todo remove
                     p1Control.charEvent(code, false);
@@ -55,6 +56,7 @@ public class JPanelPlay extends JPanel implements KeyListener {
             if (e.isShiftDown()) {
                 if (MODIFIER_CODES_SHIFT.contains(code)) {
                     System.out.println("Pressed SHIFT + " + code);//todo remove
+                    p2Control.charEvent(code, true);
                 } else if (!e.isAltDown() && REGULAR_CODES_ALT.contains(code)){
                     System.out.println("(P2) Pressed " + code);//todo remove
                     p2Control.charEvent(code, false);
