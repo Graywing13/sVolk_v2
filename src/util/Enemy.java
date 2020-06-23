@@ -13,7 +13,8 @@ public class Enemy {
     private int pixelX;
     private int pixelY;
 
-    private int hp = 100;
+    private int initHP = 100;
+    private int currentHP = initHP;
 
     private ArrayList<RotateLabel> markerOverlays = new ArrayList<RotateLabel>(){};
 
@@ -71,9 +72,10 @@ public class Enemy {
 
     // todo if i add a swing timer, this should tick like twice per second
     public void takeDamage(int dmg) {
-        hp -= dmg;
-        System.out.format("(Enemy) HP left: %d / 100%n", hp); // todo remove
-        if (hp <= 0) {
+        currentHP -= dmg;
+        System.out.format("(Enemy) HP left: %d / %d%n", currentHP, initHP); // todo remove
+        ui.volkHPBar.changeBarWidth((double) currentHP / initHP);
+        if (currentHP <= 0) {
             ui.gameOver();
         }
     }
@@ -101,5 +103,9 @@ public class Enemy {
 
     public double calcDefChange() {
         return 1; // todo
+    }
+
+    public int getHP() {
+        return currentHP;
     }
 }

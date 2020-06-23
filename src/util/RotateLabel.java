@@ -1,3 +1,5 @@
+// todo override paintComponent instead of depending on RotateIcon
+
 package util;
 
 import javax.swing.*;

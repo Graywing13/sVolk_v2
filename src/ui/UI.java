@@ -83,6 +83,8 @@ public class UI {
     private JFrame fChooseTeam;
     private JFrame fGamePlay;
     public Enemy sVolk = new Enemy(this);
+    public DrawRect volkHPBar;
+    public DrawRect volkODBar;
 
     // VARIABLES FOR THE TEAM
     private Char[] teamChars;
@@ -364,7 +366,18 @@ public class UI {
             System.out.println("Gameplay BKG not found:");
             e.printStackTrace();
         }
-        configurePlayerBars();
+        configurePlayerGraphics();
+        configureBars();
+    }
+
+    private void configureBars() {
+        volkHPBar = DrawRect.initVolkHPBar();
+        volkHPBar.setLocation(587, 39);
+        fGamePlay.add(volkHPBar);
+
+        volkODBar = DrawRect.initVolkODBar();
+        volkODBar.setLocation(637, 47);
+        fGamePlay.add(volkODBar);
     }
 
     // sets up the gameplay frame.
@@ -379,7 +392,7 @@ public class UI {
     }
 
     // sets the 4 element lil circles in the middle of the screen
-    private void configurePlayerBars() {
+    private void configurePlayerGraphics() {
         for (int i = 0; i < 4; i++) {
             switch (teamChars[i].getElem()) {
                 case "Flame":

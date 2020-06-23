@@ -1,4 +1,5 @@
 // Based off http://www.camick.com/java/source/RotatedIcon.java
+// todo override paintComponent instead of paintIcon aka move this to RotateLabel
 
 package util;
 
