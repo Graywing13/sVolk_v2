@@ -5,6 +5,8 @@ import ui.UI;
 import javax.swing.*;
 import java.util.ArrayList;
 
+import static java.lang.Thread.sleep;
+
 public class Enemy {
 
     JLabel volkMarker;
@@ -13,13 +15,20 @@ public class Enemy {
     private int pixelX;
     private int pixelY;
 
-    private int initHP = 100;
-    private int currentHP = initHP;
-
-    private ArrayList<RotateLabel> markerOverlays = new ArrayList<RotateLabel>(){};
-
     // constants
-    private String volkElem = "Wind";
+    private final String volkElem = "Wind";
+    private final int initHP = 200;
+    private final int baseOD = 20;
+    private final int baseBreak = 15;
+    private final int breakDuration = 3;
+
+    private int currentHP = initHP;
+    private int currentOD = 0;
+    private int nextStateChangeHP; // todo remove
+    private String state = "normal"; // one of "normal", "overdrive", "break", "defeat"
+
+    private ArrayList<RotateLabel> markerOverlays = new ArrayList<RotateLabel>() {
+    };
 
     private UI ui;
 
@@ -73,9 +82,37 @@ public class Enemy {
     // todo if i add a swing timer, this should tick like twice per second
     public void takeDamage(int dmg) {
         currentHP -= dmg;
-        System.out.format("(Enemy) HP left: %d / %d%n", currentHP, initHP); // todo remove
+        switch (state) {
+            case "normal":
+                currentOD += dmg;
+                ui.volkODBar.changeBarWidth(Math.min((currentOD / baseOD), 1));
+                System.out.format("(Enemy) Normal state. HP left: %d / %d | OD: %d / %d %n", currentHP, initHP, currentOD, baseOD); // todo remove
+                if (currentOD >= baseOD) {
+                    state = "overdrive";
+                }
+                break;
+            case "overdrive":
+                currentOD -= dmg;
+                ui.volkODBar.changeBarWidth((double) currentOD / baseOD);
+                System.out.format("(Enemy) Overdrive state. HP left: %d / %d | OD: %d / %d %n", currentHP, initHP, currentOD, baseOD); // todo remove
+                if (currentOD <= 0) {
+                    state = "break";
+                    nextStateChangeHP = currentHP - 40; // todo this definitely needs changing.
+                }
+                break;
+            case "break":
+                System.out.format("(Enemy) Break state. HP left: %d / %d | OD: %d / %d %n", currentHP, initHP, currentOD, baseOD); // todo remove
+                if (currentHP <= nextStateChangeHP) {
+                    state = "normal";
+                }
+                break;
+            case "defeat":
+                System.out.format("(Enemy) Defeat state. Don't think this will ever print.");
+                break;
+        }
         ui.volkHPBar.changeBarWidth((double) currentHP / initHP);
         if (currentHP <= 0) {
+            state = "defeat";
             ui.gameOver();
         }
     }

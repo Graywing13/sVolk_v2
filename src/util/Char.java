@@ -324,7 +324,7 @@ public class Char {
     // Real Gameplay ===================================================================================================
     public int damageFormula(Enemy enemy) {
         //return (int) Math.floor((5.0/3.0) * (0.01 * (100 - enemy.getDamageRes()) * calcTotalStr() * calcAtkMod() * calcCritMod() * calcSpecialDmg() * calcPunishMod() * calcElemMod(enemy) * calcDragonDmg() * calcDmgSpread()) / (enemy.getDef() * enemy.calcDefChange()));
-        return 10; // todo uncomment
+        return 8; // todo uncomment
     }
 
 
