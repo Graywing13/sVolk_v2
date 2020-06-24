@@ -14,4 +14,9 @@ public class JLabelCustom extends JLabel {
         this.setForeground(Color.WHITE);
         this.setText(s);
     }
+
+    public void formatTimer(int timeInMS) {
+        int sTimeLeft = timeInMS / 1000;
+        setText(sTimeLeft / 60 + ":" + String.format("%02d", sTimeLeft % 60));
+    }
 }

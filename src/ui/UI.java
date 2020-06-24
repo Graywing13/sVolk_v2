@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 
 public class UI {
 
@@ -114,6 +115,10 @@ public class UI {
     public UI() {
         this.runGame();
     }
+
+    // GamePlay
+    private static int msTimeLeft = 10 * 60 * 1000;
+    private Timer timer;
 
     // runs the game after initiation is complete.
     private void runGame() {
@@ -451,6 +456,23 @@ public class UI {
         fGamePlay.add(P2_FOCUS);
         fGamePlay.repaint();
 
+
+        JLabelCustom timeElapsed = new JLabelCustom("", 18);
+        timeElapsed.formatTimer(msTimeLeft);
+        timeElapsed.setBounds(900, 38, 100, 20); // todo hard code values
+        timeElapsed.setVisible(true);
+        fGamePlay.add(timeElapsed);
+
+        timer = new Timer(250, e -> {
+            msTimeLeft -= 250;
+            if (msTimeLeft % 1000 == 0) {
+                timeElapsed.formatTimer(msTimeLeft);
+                if (msTimeLeft <= 0) gameOver();
+            }
+        });
+
+        timer.start();
+
         /*
           X) import marker images as imageicons
           X) check that enterkeys works via println
@@ -476,6 +498,8 @@ public class UI {
 
     public void gameOver() {
         System.out.println("gg no re"); // todo edit and tbh maybe we need the gamerunning variable as a STOP ALL button
+        timer.stop();
+        sVolk.state = "defeat";
     }
 
 }
