@@ -89,6 +89,7 @@ public class Enemy {
                 System.out.format("(Enemy) Normal state. HP left: %d / %d | OD: %d / %d %n", currentHP, initHP, currentOD, baseOD); // todo remove
                 if (currentOD >= baseOD) {
                     state = "overdrive";
+                    ui.currentState.setText("OVERDRIVE");
                 }
                 break;
             case "overdrive":
@@ -98,12 +99,14 @@ public class Enemy {
                 if (currentOD <= 0) {
                     state = "break";
                     nextStateChangeHP = currentHP - 40; // todo this definitely needs changing.
+                    ui.currentState.setText("BREAK!");
                 }
                 break;
             case "break":
                 System.out.format("(Enemy) Break state. HP left: %d / %d | OD: %d / %d %n", currentHP, initHP, currentOD, baseOD); // todo remove
                 if (currentHP <= nextStateChangeHP) {
                     state = "normal";
+                    ui.currentState.setText("");
                 }
                 break;
             case "defeat":
@@ -111,7 +114,7 @@ public class Enemy {
                 break;
         }
         ui.volkHPBar.changeBarWidth((double) currentHP / initHP);
-        if (currentHP <= 0) {
+        if (currentHP <= 0 && !state.equals("defeat")) {
             ui.gameOver();
         }
     }

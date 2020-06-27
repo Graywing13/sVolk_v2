@@ -58,6 +58,9 @@ public class UI {
     public static final int GRID_SQUARE_DISTANCE = 23;
     public static final int ARENA_SIZE = 13;
 
+    // VARS FOR BARS
+    public JLabelCustom currentState;
+
     private static final Color DEFAULT_BKG = new Color(0, 0, 0);
     private static final String IMG_LOCATION = "././data/img/";
     private static final String GAMEPLAY_BKG_LOCATION = IMG_LOCATION + "gameplayBKGv5.png";
@@ -86,6 +89,7 @@ public class UI {
     public Enemy sVolk = new Enemy(this);
     public DrawRect volkHPBar;
     public DrawRect volkODBar;
+    private JLabelCustom shadowRect;
 
     // VARIABLES FOR THE TEAM
     private Char[] teamChars;
@@ -362,7 +366,24 @@ public class UI {
         initGridSquares();
     }
 
-    // loads the sVOLK bkg and then calls player bars initiation.
+    private void GPInitClearScreen() {
+        shadowRect = new JLabelCustom("", 24) {
+            protected void paintComponent(Graphics g) {
+                g.setColor(getBackground());
+                g.fillRect(0, 0, getWidth(), getHeight());
+                super.paintComponent(g);
+            }
+        };
+        shadowRect.setBounds(0, 0, 1366, 768);
+        shadowRect.setBackground(new Color(0,0,0,125));
+        shadowRect.setHorizontalAlignment(JLabel.CENTER);
+        shadowRect.setVerticalAlignment(JLabel.CENTER);
+        shadowRect.setOpaque(false);
+        shadowRect.setVisible(false);
+        fGamePlay.add(shadowRect);
+    }
+
+    // loads the sVOLK bkg and then calls player bars and player initiation.
     private void GPInitGraphics() {
         try {
             final Image gameplayBKG = ImageIO.read(new File(GAMEPLAY_BKG_LOCATION));
@@ -371,11 +392,18 @@ public class UI {
             System.out.println("Gameplay BKG not found:");
             e.printStackTrace();
         }
-        configurePlayerGraphics();
+        GPInitClearScreen();
         configureBars();
+        configurePlayerGraphics();
     }
 
     private void configureBars() {
+        currentState = new JLabelCustom("", 14);
+        currentState.setBounds(685, 48, 100, 16); // todo hard code values
+        currentState.setHorizontalAlignment(JLabel.CENTER);
+        currentState.setVisible(true);
+        fGamePlay.add(currentState);
+
         volkHPBar = DrawRect.initVolkHPBar();
         volkHPBar.setLocation(587, 39);
         fGamePlay.add(volkHPBar);
@@ -454,35 +482,25 @@ public class UI {
         fGamePlay.add(sVolk.setVolkMarker(6, 6));
         fGamePlay.add(P1_FOCUS);
         fGamePlay.add(P2_FOCUS);
-        fGamePlay.repaint();
+        initTimeComponents();
+    }
 
-
+    private void initTimeComponents() {
         JLabelCustom timeElapsed = new JLabelCustom("", 18);
-        timeElapsed.formatTimer(msTimeLeft);
-        timeElapsed.setBounds(900, 38, 100, 20); // todo hard code values
+        timeElapsed.setText(JLabelCustom.formatTime(msTimeLeft));
+        timeElapsed.setBounds(900, 40, 100, 20); // todo hard code values
         timeElapsed.setVisible(true);
         fGamePlay.add(timeElapsed);
 
         timer = new Timer(250, e -> {
             msTimeLeft -= 250;
             if (msTimeLeft % 1000 == 0) {
-                timeElapsed.formatTimer(msTimeLeft);
+                timeElapsed.setText(JLabelCustom.formatTime(msTimeLeft));
                 if (msTimeLeft <= 0) gameOver();
             }
         });
 
         timer.start();
-
-        /*
-          X) import marker images as imageicons
-          X) check that enterkeys works via println
-          X) when game starts, initiate the marker at (5, 9)
-          X) when arrowkey pressed, move marker in the correct direction by CONSTANT pixels
-          X) check that when arrowkey pressed, the person can actually move up or whatever
-          X) plop a volk at (7, 7)
-          X) when ya run into volk u move up two instead of 1
-          7) do damage to volk when "f" is pressed (not held) and volk is within WEP_DEP_CONSTANT squares. // todo
-         */
     }
 
     private void placePlayers() { // todo add the other characters.
@@ -500,6 +518,8 @@ public class UI {
         System.out.println("gg no re"); // todo edit and tbh maybe we need the gamerunning variable as a STOP ALL button
         timer.stop();
         sVolk.state = "defeat";
+        shadowRect.setText("<html><div style='text-align: center;'>Clear. <br/> <br/> Clear time: " + JLabelCustom.formatTime(600000 - msTimeLeft) + "</div></html>");
+        shadowRect.setVisible(true);
     }
 
 }
